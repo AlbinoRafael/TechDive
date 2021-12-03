@@ -1,18 +1,19 @@
 package estaticos;
 
-import java.util.Calendar;
-import java.util.Random;
+import static java.util.Calendar.getInstance;
+import static java.lang.System.getProperty;
+import static java.lang.Math.random;
 
 
 public class Estaticos {
 
     public static void main(String[] args) {
 
-        System.out.println("nome do SO: "+System.getProperty("os.name"));
+        System.out.println("Localização do SO: "+getProperty("os.name"));
 
-        System.out.println("data atual: "+Calendar.getInstance().getTime());
+        System.out.println("data atual: "+getInstance().getTime());
 
-        System.out.println("numero aleatório: "+Math.random());
+        System.out.printf("Numero aleatorio: %.2f",random()*100);
 
     }
 }
