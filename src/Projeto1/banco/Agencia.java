@@ -1,4 +1,4 @@
-package banco.conta;
+package banco;
 
 public class Agencia {
     private String numero;
@@ -30,9 +30,6 @@ public class Agencia {
 
     @Override
     public String toString() {
-        return "Agencia{" +
-                "numero='" + numero + '\'' +
-                ", cidade='" + cidade + '\'' +
-                '}';
+        return numero +" - "+cidade;
     }
 }

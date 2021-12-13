@@ -1,30 +1,45 @@
 package banco.conta;
 
+import banco.Agencia;
+import banco.servico.Transacao;
+import banco.utils.MsgPadrao;
+
+import javax.swing.text.MaskFormatter;
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-abstract class Conta {
-
+public abstract class Conta {
+    private List<Transacao> transacoes = new ArrayList<>();
+    private static int id;
     private String nome;
-    private String cpf; //(é necessário validar o CPF)
+    private String cpf;
     private double rendaMensal;
-    private int identificador; //o sistema deverá gerar um número da conta sequencial
-    private Agencia agencia;
+    private int identificador;
     private double saldo;
-    private String extrato = "==== Extrato ===\n------------------------------------------------\n";
+    private Agencia agencia;
+    private String extrato;
 
-    public Conta(){
+    public Conta() {
         super();
+        this.identificador = id + 1;
+        id++;
     }
 
-    public Conta(String nome, String cpf, double rendaMensal, int identificador, Agencia agencia, double saldo) {
+    public Conta(String nome, String cpf, double rendaMensal) {
         this.nome = nome;
         this.cpf = cpf;
         this.rendaMensal = rendaMensal;
-        this.identificador = identificador;
-        this.agencia = agencia;
-        this.saldo = saldo;
+        this.saldo = 0;
+        this.identificador = id;
+        id++;
+    }
+
+    public List<Transacao> getTransacoes() {
+        return transacoes;
     }
 
     public String getNome() {
@@ -55,10 +70,6 @@ abstract class Conta {
         return identificador;
     }
 
-    public void setIdentificador(int identificador) {
-        this.identificador = identificador;
-    }
-
     public Agencia getAgencia() {
         return agencia;
     }
@@ -67,65 +78,76 @@ abstract class Conta {
         this.agencia = agencia;
     }
 
-    public double getSaldo() {
-        return saldo;
-    }
-
     public void setSaldo(double saldo) {
         this.saldo = saldo;
+    }
+
+    public double getSaldo() {
+        return this.saldo;
     }
 
     public String getExtrato() {
         return extrato;
     }
 
-    public void saque(double valorSaque){
-        this.extrato += "Saldo atual:          R$ "+this.saldo+
-                      "\nValor do saque:      -R$ "+valorSaque+"\n\n";
-
-        this.saldo-=valorSaque;
-
-        this.extrato += "Valor final:          R$ "+this.saldo+"\n\n"+
-                        "DATA: "+this.mostraData()+"\n------------------------------------------------\n";
-    }
-
-    public void deposito(double valorDeposito){
-        this.extrato += "Saldo atual:          R$ "+this.saldo+
-                      "\nValor do depósito:   +R$ "+valorDeposito+"\n\n";
-
-        this.saldo+=valorDeposito;
-
-        this.extrato += "Valor final:          R$ "+this.saldo+"\n\n"+
-                        "DATA: "+this.mostraData()+"\n------------------------------------------------\n";
-    }
-
-    public double saldo(){
-        return this.getSaldo();
-    }
-    public String extrato(){
-        return this.getExtrato();
-    }
-    public void transferir(Conta contaAlvo, double valorTransferencia){
-        if(this.saldo>=valorTransferencia){
-            this.extrato += "Saldo atual:               R$ "+this.saldo+
-                          "\nValor da transferência:   -R$ "+valorTransferencia+"\n\n";
-
-            this.saldo-=valorTransferencia;
-
-            contaAlvo.deposito(valorTransferencia);
-
-            this.extrato += "Valor final:               R$ "+this.saldo+"\n\n"+
-                    "DATA: "+this.mostraData()+"\n------------------------------------------------\n";
-
-        }else{
-            System.out.println("Você não possui saldo suficiente!");
+    public void setExtrato(String extrato) {
+        if (this.extrato == null) {
+            this.extrato = extrato;
+        } else {
+            this.extrato += extrato;
         }
     }
 
-    public String mostraData(){
-        LocalDateTime ldt = LocalDateTime.now();
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        String data = ldt.format(dtf);
-        return data;
+    public String extrato() {
+        String extrato = "\n----------- Extrato -----------\n";
+        extrato += this.getExtrato();
+        return extrato;
+    }
+
+    public void saque(double valorSaque) {
+            Transacao transacao = new Transacao(this, valorSaque);
+            transacao.setTipo("Saque");
+            transacao.setValor(valorSaque);
+            this.setSaldo(this.getSaldo() - transacao.getValor());
+            this.setExtrato(transacao.toString());
+            this.getTransacoes().add(transacao);
+    }
+
+    public void deposito(double valorDeposito) {
+        if (valorDeposito > 0) {
+            Transacao transacao = new Transacao(this, valorDeposito);
+            transacao.setTipo("Depósito");
+            transacao.setValor(valorDeposito);
+            this.setSaldo(this.getSaldo() + transacao.getValor());
+            this.setExtrato(transacao.toString());
+            this.getTransacoes().add(transacao);
+        } else {
+            MsgPadrao.mensagem("Insira um valor válido!");
+        }
+    }
+
+    public void transferir(Conta contaAlvo, double valorTransferencia) {
+        if (this.getSaldo() >= valorTransferencia) {
+            if (this != contaAlvo) {
+                Transacao transacao = new Transacao(this, contaAlvo, valorTransferencia);
+                transacao.setTipo("Transferência");
+                transacao.setContaAlvo(contaAlvo);
+                transacao.setValor(valorTransferencia);
+                this.setSaldo(this.getSaldo() - transacao.getValor());
+                contaAlvo.setSaldo(contaAlvo.getSaldo() + valorTransferencia);
+                this.setExtrato(transacao.toString());
+                contaAlvo.setExtrato(transacao.toString());
+                this.getTransacoes().add(transacao);
+                contaAlvo.getTransacoes().add(transacao);
+            } else {
+                MsgPadrao.mensagem("A conta de origem e a de destino não podem ser a mesma!");
+            }
+        } else {
+            MsgPadrao.mensagem("Você não possui saldo suficiente!");
+        }
+    }
+
+    public String toString() {
+        return this.getNome();
     }
 }
