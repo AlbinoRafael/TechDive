@@ -1,18 +1,21 @@
 package main;
 
+import pessoa.Administrador;
 import pessoa.Empregado;
 import pessoa.Fornecedor;
 
 public class main {
 
     public static void main(String[] args) {
-        Empregado emp = new Empregado("Joao", "Rua mais nova", "98989-8989",3, 2000,10);
+        Administrador adm = new Administrador("Marcos", "Rua rua", "88888-8888", 3,4000,15,560);
 
-        System.out.println(emp.toString());
-        System.out.println("Setor: "+emp.getCodigoSetor());
-        System.out.println("Salario base: R$"+emp.getSalarioBase());
-        System.out.println("Taxa de imposto: "+emp.getImposto()+"%");
-        System.out.println("Salario limpo: R$ "+emp.calcularSalario());
-
+        System.out.println("Setor: "+adm.getCodigoSetor());
+        System.out.println("Nome: "+adm.getNome());
+        System.out.println("Endereco: "+adm.getEndereco());
+        System.out.println("Telefone: "+adm.getTelefone());
+        System.out.println("Salario bruto: R$ "+adm.getSalarioBase());
+        System.out.println("valor do imposto: "+adm.getImposto()+"%");
+        System.out.println("Ajuda de custo: R$ "+adm.getAjudaDeCusto());
+        System.out.println("Salario limpo: R$ "+adm.calcularSalario());
     }
 }
