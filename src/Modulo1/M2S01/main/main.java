@@ -1,11 +1,11 @@
 package main;
 
-import pessoa.Funcionario;
+import pessoa.Fornecedor;
 
 public class main {
 
     public static void main(String[] args) {
-        Funcionario f = new Funcionario("Pedro", "Rua nova", "00000-0000",
+        Fornecedor f = new Fornecedor("Pedro", "Rua nova", "00000-0000",
                 1000, 500);
 
 
