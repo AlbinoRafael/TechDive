@@ -3,19 +3,21 @@ package main;
 import pessoa.Administrador;
 import pessoa.Empregado;
 import pessoa.Fornecedor;
+import pessoa.Operario;
 
 public class main {
 
     public static void main(String[] args) {
-        Administrador adm = new Administrador("Marcos", "Rua rua", "88888-8888", 3,4000,15,560);
+        Operario opr = new Operario("Marcos", "Rua rua", "88888-8888", 3,4000,15,1200,15);
 
-        System.out.println("Setor: "+adm.getCodigoSetor());
-        System.out.println("Nome: "+adm.getNome());
-        System.out.println("Endereco: "+adm.getEndereco());
-        System.out.println("Telefone: "+adm.getTelefone());
-        System.out.println("Salario bruto: R$ "+adm.getSalarioBase());
-        System.out.println("valor do imposto: "+adm.getImposto()+"%");
-        System.out.println("Ajuda de custo: R$ "+adm.getAjudaDeCusto());
-        System.out.println("Salario limpo: R$ "+adm.calcularSalario());
+        System.out.println("Setor: "+opr.getCodigoSetor());
+        System.out.println("Nome: "+opr.getNome());
+        System.out.println("Endereco: "+opr.getEndereco());
+        System.out.println("Telefone: "+opr.getTelefone());
+        System.out.println("Salario bruto: R$ "+opr.getSalarioBase());
+        System.out.println("valor do imposto: "+opr.getImposto()+"%");
+        System.out.println("Valor da produção: R$ "+opr.getValorProducao());
+        System.out.println("Comissão: "+opr.getComissao()+"%");
+        System.out.println("Salario limpo: R$ "+opr.calcularSalario());
     }
 }
