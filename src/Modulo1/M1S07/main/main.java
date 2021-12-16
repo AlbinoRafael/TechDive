@@ -1,22 +1,34 @@
 package main;
 
-import animal.Cachorro;
-import animal.Cavalo;
-import animal.Preguica;
+import animal.*;
 import veterinario.Veterinario;
+import zoologico.Zoologico;
 
 class Principal {
 
     public static void main(String[] args) {
-        Cachorro cachorro = new Cachorro("Rex", 2);
-        Cavalo cavalo = new Cavalo("Pé-de-Pano", 3);
-        Preguica preguica = new Preguica("Soneca", 1);
 
-        Veterinario veterinario = new Veterinario();
+        {
+            Zoologico zoologico = new Zoologico();
+            zoologico.jaulas.add(new Cachorro("Rex",1));
+            zoologico.jaulas.add(new Cavalo("Pé-de-Pano",1));
+            zoologico.jaulas.add(new Preguica("Soneca",1));
+            zoologico.jaulas.add(new Cachorro("Tobby",2));
+            zoologico.jaulas.add(new Cavalo("Trovão",2));
+            zoologico.jaulas.add(new Preguica("Toin",2));
+            zoologico.jaulas.add(new Cachorro("Pipo",3));
+            zoologico.jaulas.add(new Cavalo("Alípio",3));
+            zoologico.jaulas.add(new Preguica("Relaxo",3));
+            zoologico.jaulas.add(new Cachorro("Spike",4));
+        }
 
-        veterinario.examinar(cachorro);
-        veterinario.examinar(cavalo);
-        veterinario.examinar(preguica);
+        for(Animal animal:Zoologico.jaulas){
+            animal.emitirSom();
+            if(animal instanceof Cachorro||animal instanceof Cavalo){
+                ((MovimentacaoAnimal) animal).correr();
+            }
+        }
+
 
     }
 }
