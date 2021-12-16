@@ -8,10 +8,10 @@ public class Preguica extends Animal{
 
     @Override
     public void emitirSom(){
-        System.out.println(this.getNome()+" está grunhindo...");
+        System.out.println(this.getNome()+" está grunhindo...\n");
     }
 
     public void subirEmArvore(){
-        System.out.println(this.getNome()+" está subindo na árvore...");
+        System.out.println(this.getNome()+" está subindo na árvore...\n");
     }
 }

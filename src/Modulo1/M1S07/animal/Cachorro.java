@@ -8,11 +8,11 @@ public class Cachorro extends Animal implements MovimentacaoAnimal{
 
     @Override
     public void emitirSom(){
-        System.out.println(this.getNome()+" está latindo...");
+        System.out.println(this.getNome()+" está latindo...\n");
     }
 
     @Override
     public void correr() {
-        System.out.println(this.getNome()+" está correndo...");
+        System.out.println(this.getNome()+" está correndo...\n");
     }
 }
