@@ -6,7 +6,12 @@ public class Preguica extends Animal{
         super(nome, idade);
     }
 
+    @Override
+    public void emitirSom(){
+        System.out.println(this.getNome()+" está grunhindo...");
+    }
+
     public void subirEmArvore(){
-        System.out.println("Subindo na árvore...");
+        System.out.println(this.getNome()+" está subindo na árvore...");
     }
 }
