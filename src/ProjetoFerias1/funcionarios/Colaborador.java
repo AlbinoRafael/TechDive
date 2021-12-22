@@ -2,7 +2,12 @@ package funcionarios;
 
 public class Colaborador extends Funcionario{
 
-    public Colaborador(String nome, String cpf, int idade, double salario) {
-        super(nome, cpf, idade, salario);
+    private double beneficios;
+
+    public Colaborador(String nome, String cpf, int idade, double salario, double beneficios) {
+        super(nome, cpf, idade, salario); this.beneficios = beneficios;
+    }
+    public double getBeneficios(){
+        return this.beneficios;
     }
 }
