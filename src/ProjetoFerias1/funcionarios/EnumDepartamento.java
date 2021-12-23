@@ -19,11 +19,11 @@ public enum EnumDepartamento implements StringValueEnum{
 
     @Override
     public String getValue() {
-        return null;
+        return this.value;
     }
 
     @Override
     public String getDisplayName() {
-        return null;
+        return this.displayName;
     }
 }
