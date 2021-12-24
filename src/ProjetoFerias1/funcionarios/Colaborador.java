@@ -13,6 +13,10 @@ public class Colaborador extends Funcionario{
         return this.beneficios;
     }
 
+    public void setBeneficios(double beneficios) {
+        this.beneficios = beneficios;
+    }
+
     @Override
     public String toString(){
         String retorno = "\nNome: "+this.getNome()+

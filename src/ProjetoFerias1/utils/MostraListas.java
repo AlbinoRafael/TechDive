@@ -19,6 +19,7 @@ public class MostraListas {
         int index = 1;
         for(Funcionario f: lista){
             retorno += index+" - "+ f.getNome()+"\n";
+            index++;
         }
         Scanner sc = new Scanner(System.in);
         System.out.println("\n------------Lista de Funcionarios------------\n\n"+retorno);

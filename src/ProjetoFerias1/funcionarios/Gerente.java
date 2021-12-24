@@ -24,8 +24,9 @@ public abstract class Gerente extends Funcionario implements Gerenciamento{
                 "\nCPF: "+this.getCpf()+
                 "\nIdade: "+this.getIdade()+
                 "\nSalário: R$ "+this.getSalario()+
-                "\nDepartamento: "+this.getDepartamento()+
-                "\nBônus: R$ "+this.getBonus();
+                "\nDepartamento: "+this.getDepartamento().getDisplayName()+
+                "\nBônus: R$ "+this.getBonus()+
+                "\nSituação: "+this.estaAtivo(this.estaAtivo());
         return retorno;
     }
 }

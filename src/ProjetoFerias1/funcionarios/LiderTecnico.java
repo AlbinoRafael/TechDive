@@ -10,15 +10,4 @@ public class LiderTecnico extends Colaborador implements Gerenciamento{
     public void comandar(String comando){
         System.out.println(comando);
     }
-
-    @Override
-    public String toString(){
-        String retorno = "\nNome: "+this.getNome()+
-                "\nCPF: "+this.getCpf()+
-                "\nIdade: "+this.getIdade()+
-                "\nSalário: R$ "+this.getSalario()+
-                "\nDepartamento: "+this.getDepartamento()+
-                "\nBenefícios: R$ "+this.getBeneficios();
-        return retorno;
-    }
 }

@@ -38,4 +38,17 @@ public class Menu {
         System.out.println("| 5 - Operacional                                       |");
         System.out.println("=========================================================");
     }
+    public static void menuAtualizaInformacoesFuncionario(){
+        System.out.println("\n=========================================================");
+        System.out.println("|              Atualização de Informações               |");
+        System.out.println("=========================================================");
+        System.out.println("| 1 - Nome                                              |");
+        System.out.println("| 2 - Idade                                             |");
+        System.out.println("| 3 - Salário                                           |");
+        System.out.println("| 4 - Departamento                                      |");
+        System.out.println("| 5 - Benefícios/Bonificações                           |");
+        System.out.println("| 6 - Situação                                          |");
+        System.out.println("| 0 - Sair                                              |");
+        System.out.println("=========================================================");
+    }
 }

@@ -28,12 +28,22 @@ public abstract class Funcionario {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String getCpf() {
         return cpf;
     }
 
+
+
     public int getIdade() {
         return idade;
+    }
+
+    public void setIdade(int idade) {
+        this.idade = idade;
     }
 
     public double getSalario() {
@@ -79,6 +89,11 @@ public abstract class Funcionario {
     public boolean estaAtivo(){
         return estaAtivo;
     }
+
+    public void setEstaAtivo(boolean isAtivo){
+        this.estaAtivo = isAtivo;
+    }
+
     public String estaAtivo(Boolean isAtivo){
         String situacao = "Ativo";
         if(isAtivo == false){
