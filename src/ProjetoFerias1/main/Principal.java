@@ -73,6 +73,27 @@ public class Principal {
                         System.out.println("\nSem Funcionários cadastrados!");
                     }
                     break;
+                case 5:
+                    if(!funcionarios.isEmpty()){
+                        listaTodosFuncionarios();
+                    }else{
+                        System.out.println("\nSem Funcionários cadastrados!");
+                    }
+                    break;
+                case 6:
+                    if(!funcionarios.isEmpty()){
+                        listaFuncionariosAtivos();
+                    }else{
+                        System.out.println("\nSem Funcionários cadastrados!");
+                    }
+                    break;
+                case 7:
+                    if(!funcionarios.isEmpty()){
+                        listaFuncionariosDesativados();
+                    }else{
+                        System.out.println("\nSem Funcionários cadastrados!");
+                    }
+                    break;
                 case 0:
                     break;
             }
@@ -132,8 +153,12 @@ public class Principal {
     }
 
     public static void demiteFuncionario(){
-        Funcionario funcionario = MostraListas.escolheFuncionario(funcionarios);
-        funcionario.setEstaAtivo(false);
+        Funcionario funcionario = MostraListas.escolheFuncionarioAtivo(funcionarios);
+        for(int i=0; i<funcionarios.size(); i++) {
+            if(funcionario.getCpf().equalsIgnoreCase(funcionarios.get(i).getCpf())) {
+                funcionarios.get(i).setEstaAtivo(false);
+            }
+        }
     }
 
     public static void atualizaInformacoesFuncionario(){
@@ -202,5 +227,20 @@ public class Principal {
                 }
                 break;
         }
+    }
+
+    public static void listaTodosFuncionarios(){
+        System.out.println("\n-------- Lista de todos os Funcionários ---------\n");
+        System.out.println(MostraListas.listar(funcionarios,1));
+    }
+
+    public static void listaFuncionariosAtivos(){
+        System.out.println("\n-------- Lista dos funcionários ATIVOS ----------\n");
+        System.out.println(MostraListas.listar(funcionarios,2));
+    }
+
+    public static void listaFuncionariosDesativados(){
+        System.out.println("\n-------- Lista dos funcionários DESATIVADOS ----------\n");
+        System.out.println(MostraListas.listar(funcionarios,3));
     }
 }
