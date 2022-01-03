@@ -1,17 +1,21 @@
 package escola;
 
 public class Docente {
-
+    public static int idDocente = 1;
     private int identificacao;
     private String nomeDocente;
     private Turma turmaAtendida;
 
-    public Docente(){}
+    public Docente(){
+        this.identificacao = idDocente;
+        idDocente++;
+    }
 
-    public Docente(int identificacao, String nomeDocente, Turma turmaAtendida) {
-        this.identificacao = identificacao;
+    public Docente(String nomeDocente, Turma turmaAtendida) {
         this.nomeDocente = nomeDocente;
         this.turmaAtendida = turmaAtendida;
+        this.identificacao = idDocente;
+        idDocente++;
     }
 
     public int getIdentificacao() {
