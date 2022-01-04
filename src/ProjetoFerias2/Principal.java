@@ -1,12 +1,9 @@
 import escola.Docente;
 import escola.Turma;
 import utils.Menus;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,16 +31,19 @@ public class Principal {
                     break;
                 case 3:
                     System.out.println("Selecione a turma: ");
-                    Turma turma = escolheTurma(turmas);
+                    Turma turma = escolheTurma();
                     System.out.println("Selecione o docente para a turma: ");
-                    Docente docente = escolheDocente(docentes);
+                    Docente docente = escolheDocente();
                     turma.setDocente(docente);
                     break;
                 case 4:
+                    listaTurmas();
                     break;
                 case 5:
+                    listaDocentes();
                     break;
                 case 6:
+                    listaUnicoDocente();
                     break;
                 case 0:
                     break;
@@ -94,34 +94,55 @@ public class Principal {
         System.out.print("Digite o nome: ");
         String nomeDocente = sc.nextLine();
         System.out.println("Escolha a turma: ");
-        Turma turma = escolheTurma(turmas);
+        Turma turma = escolheTurma();
         Docente docente = new Docente(nomeDocente, turma);
         docentes.add(docente);
     }
-    public static Turma escolheTurma(List<Turma>lista){
+    public static Turma escolheTurma(){
         int index = 1;
         String retorno = "";
-        for(int i =0; i<lista.size();i++){
-            retorno += index +" - "+lista.get(i).getNomeTurma()+"\n";
+        for(Turma t:turmas){
+            retorno += index +" - "+t.getNomeTurma()+"\n";
             index++;
         }
         System.out.println("\n----Lista de turmas----");
         System.out.println(retorno);
         Scanner sc = new Scanner(System.in);
         int op = sc.nextInt();
-        return lista.get(op-1);
+        return turmas.get(op-1);
     }
-    public static Docente escolheDocente(List<Docente>lista){
+    public static Docente escolheDocente(){
         int index = 1;
         String retorno = "";
-        for(int i =0; i<lista.size();i++){
-            retorno += index +" - "+lista.get(i).getNomeDocente()+"\n";
+        for(Docente d:docentes){
+            retorno += index +" - "+d.getNomeDocente()+"\n";
             index++;
         }
         System.out.println("\n----Lista de Docentes----");
         System.out.println(retorno);
         Scanner sc = new Scanner(System.in);
         int op = sc.nextInt();
-        return lista.get(op-1);
+        return docentes.get(op-1);
+    }
+    public static String listaTurmas(){
+        String retorno = "";
+        for(Turma t:turmas){
+            retorno+= "\nNome da turma: "+t.getNomeTurma()+"\nAssuntos: "+t.getAssuntos()+"\nDocente: "+
+                    t.getDocente()+"\n";
+        }
+        return retorno;
+    }
+    public static String listaDocentes(){
+        int index = 1;
+        String retorno = "";
+        for(Docente d: docentes){
+            retorno += index +" - "+d.getNomeDocente()+"\n";
+            index++;
+        }
+        return retorno;
+    }
+    public static String listaUnicoDocente(){
+        Docente docente = escolheDocente();
+        return docente.toString();
     }
 }
