@@ -1,12 +1,23 @@
 package escola;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Docente {
+
     public static int idDocente = 1;
+    private List<String> escalas =new ArrayList<>();
     private int identificacao;
     private String nomeDocente;
     private Turma turmaAtendida;
+    private int escalaDeTrabalho;
 
     public Docente(){
+        this.identificacao = idDocente;
+        idDocente++;
+    }
+    public Docente(String nomeDocente) {
+        this.nomeDocente = nomeDocente;
         this.identificacao = idDocente;
         idDocente++;
     }
@@ -30,8 +41,16 @@ public class Docente {
         return turmaAtendida;
     }
 
-    public void setIdentificacao(int identificacao) {
-        this.identificacao = identificacao;
+    public int getEscalaDeTrabalho() {
+        return escalaDeTrabalho;
+    }
+
+    public void setEscalaDeTrabalho(int escalaDeTrabalho) {
+        this.escalaDeTrabalho = escalaDeTrabalho;
+    }
+
+    public List<String> getEscalas() {
+        return escalas;
     }
 
     public void setNomeDocente(String nomeDocente) {

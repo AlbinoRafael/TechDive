@@ -1,8 +1,7 @@
 import escola.Docente;
 import escola.Turma;
 import utils.Menus;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,17 +11,30 @@ public class Principal {
     public static List<Turma> turmas = new ArrayList<>();
     public static List<Docente> docentes = new ArrayList<>();
 
+    static {
+        turmas.add(new Turma("Turma A", 20, "04/03/2022"));
+        turmas.add(new Turma("Turma B", 26, "04/03/2022"));
+
+        docentes.add(new Docente("João"));
+        docentes.add(new Docente("Pedro"));
+        docentes.add(new Docente("Marcos"));
+        docentes.add(new Docente("Maria"));
+        docentes.add(new Docente("Paulo"));
+
+    }
+
     public static void main(String[] args) {
         programa();
     }
-    public static void programa(){
+
+    public static void programa() {
         Scanner sc = new Scanner(System.in);
         int op;
-        do{
+        do {
             Menus.menuPrincipal();
             System.out.print("Digite uma opção acima: ");
             op = sc.nextInt();
-            switch (op){
+            switch (op) {
                 case 1:
                     cadastraTurma();
                     break;
@@ -30,11 +42,15 @@ public class Principal {
                     cadastraDocente();
                     break;
                 case 3:
-                    System.out.println("Selecione a turma: ");
                     Turma turma = escolheTurma();
-                    System.out.println("Selecione o docente para a turma: ");
+                    System.out.println("Escolha o docente para a "+turma.getNomeTurma());
                     Docente docente = escolheDocente();
-                    turma.setDocente(docente);
+                    turma.getDocentes().add(docente);
+                    for(int i=0;i<turmas.size();i++){
+                        if(turmas.get(i).getIdentificacao()==turma.getIdentificacao()){
+                            turmas.set(i,turma);
+                        }
+                    }
                     break;
                 case 4:
                     listaTurmas();
@@ -48,9 +64,10 @@ public class Principal {
                 case 0:
                     break;
             }
-        }while(op!=0);
+        } while (op != 0);
     }
-    public static void cadastraTurma(){
+
+    public static void cadastraTurma() {
         Scanner sc = new Scanner(System.in);
         System.out.println("\n----- Cadastro de Turma -----\n");
         System.out.print("Digite o nome da turma: ");
@@ -59,36 +76,11 @@ public class Principal {
         int qtdAlunos = sc.nextInt();
         System.out.print("Digite a data de inicio(dd/MM/yyyy): ");
         String dtInicio = sc.next();
-        LocalDate dataInicio = LocalDate.parse(dtInicio,DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-        Turma turma = new Turma(nomeTurma,qtdAlunos,dataInicio);
-        int op;
-        do{
-            Menus.menuAssuntos();
-            System.out.print("Digite uma opção acima: ");
-            op = sc.nextInt();
-            switch (op){
-                case 1:
-                    turma.getAssuntos().add("Java");
-                    break;
-                case 2:
-                    turma.getAssuntos().add("C/C++");
-                    break;
-                case 3:
-                    turma.getAssuntos().add("C#");
-                    break;
-                case 4:
-                    turma.getAssuntos().add("Python");
-                    break;
-                case 5:
-                    turma.getAssuntos().add("Banco de Dados");
-                    break;
-                case 0:
-                    break;
-            }
-        }while(op!=0);
+        Turma turma = new Turma(nomeTurma, qtdAlunos, dtInicio);
         turmas.add(turma);
     }
-    public static void cadastraDocente(){
+
+    public static void cadastraDocente() {
         Scanner sc = new Scanner(System.in);
         System.out.println("\n----- Cadastro de Docente -----\n");
         System.out.print("Digite o nome: ");
@@ -98,51 +90,68 @@ public class Principal {
         Docente docente = new Docente(nomeDocente, turma);
         docentes.add(docente);
     }
-    public static Turma escolheTurma(){
+
+    public static Turma escolheTurma() {
         int index = 1;
         String retorno = "";
-        for(Turma t:turmas){
-            retorno += index +" - "+t.getNomeTurma()+"\n";
+        for (Turma t : turmas) {
+            retorno += index + " - " + t.getNomeTurma() + "\n";
             index++;
         }
-        System.out.println("\n----Lista de turmas----");
+        System.out.println("\n----Lista de turmas----\n");
         System.out.println(retorno);
         Scanner sc = new Scanner(System.in);
+        System.out.print("Selecione a turma: ");
         int op = sc.nextInt();
-        return turmas.get(op-1);
+        return turmas.get(op - 1);
     }
-    public static Docente escolheDocente(){
+
+    public static Docente escolheDocente() {
         int index = 1;
         String retorno = "";
-        for(Docente d:docentes){
-            retorno += index +" - "+d.getNomeDocente()+"\n";
+        for (Docente d : docentes) {
+            retorno += index + " - " + d.getNomeDocente() + "\n";
             index++;
         }
-        System.out.println("\n----Lista de Docentes----");
+        System.out.println("\n----Lista de Docentes----\n");
         System.out.println(retorno);
         Scanner sc = new Scanner(System.in);
+        System.out.print("Selecione o docente: ");
         int op = sc.nextInt();
-        return docentes.get(op-1);
+        return docentes.get(op - 1);
     }
-    public static String listaTurmas(){
+
+    public static void listaTurmas() {
         String retorno = "";
-        for(Turma t:turmas){
-            retorno+= "\nNome da turma: "+t.getNomeTurma()+"\nAssuntos: "+t.getAssuntos()+"\nDocente: "+
-                    t.getDocente()+"\n";
+        if (!turmas.isEmpty()) {
+            for (Turma t : turmas) {
+                retorno += t.getNomeTurma() + '\n';
+            }
+            System.out.println("\n-------Lista de turmas---------\n\n" + retorno);
+        } else {
+            System.out.println("Sem turmas definidas!");
         }
-        return retorno;
+
     }
-    public static String listaDocentes(){
+
+    public static void listaDocentes() {
         int index = 1;
         String retorno = "";
-        for(Docente d: docentes){
-            retorno += index +" - "+d.getNomeDocente()+"\n";
-            index++;
+        if (!docentes.isEmpty()) {
+            for (Docente d : docentes) {
+                retorno += index + " - " + d.getNomeDocente() + "\n";
+                index++;
+            }
+            System.out.println("\n------ Lista de todos os Docentes --------\n\n" + retorno);
+        } else {
+            System.out.println("Sem docentes definidos!");
         }
-        return retorno;
     }
-    public static String listaUnicoDocente(){
+
+    public static void listaUnicoDocente() {
         Docente docente = escolheDocente();
-        return docente.toString();
+        System.out.println(docente.toString());
     }
+
+
 }
