@@ -1,9 +1,11 @@
 package escola;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Semana {
     public static int id=1;
+    private int identificacao;
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private String assunto;
@@ -16,7 +18,12 @@ public class Semana {
     public Semana(LocalDate dataInicio, LocalDate dataFim){
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
+        this.identificacao =id;
         id++;
+    }
+
+    public int getIdentificacao() {
+        return identificacao;
     }
 
     public LocalDate getDataInicio() {
@@ -47,6 +54,10 @@ public class Semana {
         return semanaDividida;
     }
 
+    public void setSemanaDividida(boolean semanaDividida) {
+        this.semanaDividida = semanaDividida;
+    }
+
     public void setAssunto(String assunto) {
         this.assunto = assunto;
     }
@@ -67,13 +78,8 @@ public class Semana {
             for(int i=2; i<5;i++) {
                 escala2 += dataInicio.plusDays(i).toString()+"\n";
             }
-            if(docente1.getEscalaDeTrabalho()==1){
-                docente1.getEscalas().add(escala1);
-                docente2.getEscalas().add(escala2);
-            }else if(docente1.getEscalaDeTrabalho()==2){
-                docente1.getEscalas().add(escala2);
-                docente2.getEscalas().add(escala1);
-            }
+            docente1.getEscalas().add(escala1);
+            docente2.getEscalas().add(escala2);
         }else{
             String escala="";
             for(int i=0; i<5;i++) {
@@ -82,5 +88,11 @@ public class Semana {
             docente1.getEscalas().add(escala);
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "Semana "+getIdentificacao()+" (" +this.getDataInicio().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + "-" +
+                this.getDataFim().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ") - " + this.getAssunto();
     }
 }

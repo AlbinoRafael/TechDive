@@ -1,4 +1,5 @@
 import escola.Docente;
+import escola.Semana;
 import escola.Turma;
 import utils.Menus;
 
@@ -15,11 +16,11 @@ public class Principal {
         turmas.add(new Turma("Turma A", 20, "04/03/2022"));
         turmas.add(new Turma("Turma B", 26, "04/03/2022"));
 
-        docentes.add(new Docente("João"));
-        docentes.add(new Docente("Pedro"));
-        docentes.add(new Docente("Marcos"));
-        docentes.add(new Docente("Maria"));
-        docentes.add(new Docente("Paulo"));
+        docentes.add(new Docente("João", turmas.get(0)));
+        docentes.add(new Docente("Pedro",turmas.get(0)));
+        docentes.add(new Docente("Marcos",turmas.get(1)));
+        docentes.add(new Docente("Maria",turmas.get(0)));
+        docentes.add(new Docente("Paulo",turmas.get(1)));
 
     }
 
@@ -43,8 +44,9 @@ public class Principal {
                     break;
                 case 3:
                     Turma turma = escolheTurma();
-                    System.out.println("Escolha o docente para a "+turma.getNomeTurma());
+                    System.out.println("Escolha um docente para a "+turma.getNomeTurma());
                     Docente docente = escolheDocente();
+                    docente.setTurmaAtendida(turma);
                     turma.getDocentes().add(docente);
                     for(int i=0;i<turmas.size();i++){
                         if(turmas.get(i).getIdentificacao()==turma.getIdentificacao()){
@@ -53,12 +55,31 @@ public class Principal {
                     }
                     break;
                 case 4:
-                    listaTurmas();
+                    docente = escolheDocente();
+                    Semana semana = docente.getTurmaAtendida().escolheSemana();
+                    if(semana.getDocente1()==null){
+                        semana.setDocente1(docente);
+                        semana.separaDias();
+                        docente.getSemanasDefinidas().add(semana);
+                    }else{
+                        semana.setSemanaDividida(true);
+                        semana.setDocente2(docente);
+                        semana.separaDias();
+                    }
+                    for(int i=0;i<docentes.size();i++){
+                        if(docentes.get(i).getIdentificacao()==docente.getIdentificacao()){
+                            docentes.set(i,docente);
+                            //docentes.get(i).getSemanasDefinidas().add(semana);
+                        }
+                    }
                     break;
                 case 5:
-                    listaDocentes();
+                    listaTurmas();
                     break;
                 case 6:
+                    listaDocentes();
+                    break;
+                case 7:
                     listaUnicoDocente();
                     break;
                 case 0:
@@ -125,7 +146,7 @@ public class Principal {
         String retorno = "";
         if (!turmas.isEmpty()) {
             for (Turma t : turmas) {
-                retorno += t.getNomeTurma() + '\n';
+                retorno += t.toString() + '\n';
             }
             System.out.println("\n-------Lista de turmas---------\n\n" + retorno);
         } else {
