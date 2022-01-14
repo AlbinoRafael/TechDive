@@ -1,6 +1,6 @@
 package entidades;
 
-public class Inimigo extends Personagem implements Atacante{
+public abstract class Inimigo extends Personagem implements Atacante{
 
     private EnumArma arma;
 

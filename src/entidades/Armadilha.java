@@ -25,4 +25,9 @@ public class Armadilha implements Atacante{
     public void setArma(EnumArma arma) {
         this.arma = arma;
     }
+
+    @Override
+    public void atacar(Personagem personagem) {
+        personagem.pontosSaude -= this.getPontosAtaque();
+    }
 }

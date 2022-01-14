@@ -2,9 +2,11 @@ package entidades;
 
 public abstract class Personagem {
 
-    private int pontosSaude;
-    private int pontosAtaque;
-    private int pontosDefesa;
+    protected int pontosSaude;
+    protected int pontosAtaque;
+    protected int pontosDefesa;
+
+    private Personagem(){}
 
     public Personagem(int pontosSaude, int pontosAtaque, int pontosDefesa) {
         this.pontosSaude = pontosSaude;
@@ -22,5 +24,9 @@ public abstract class Personagem {
 
     public int getPontosDefesa() {
         return pontosDefesa;
+    }
+
+    public void setPontosSaude(int pontosSaude) {
+        this.pontosSaude = pontosSaude;
     }
 }

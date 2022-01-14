@@ -2,24 +2,24 @@ package entidades;
 
 public enum EnumArma implements StringValueEnum{
 
-    ARMAJOGADOR1("ARMAJOGADOR1","Espada"),
-    ARMAJOGADOR2("ARMAJOGADOR2","Machado"),
-    ARMAJOGADOR3("ARMAJOGADOR3","Martelo"),
-    ARMAJOGADOR4("ARMAJOGADOR4","Clava"),
-    ARMAJOGADOR5("ARMAJOGADOR5","Arco"),
-    ARMAJOGADOR6("ARMAJOGADOR6","Besta"),
-    ARMAJOGADOR7("ARMAJOGADOR7","Cajado"),
-    ARMAJOGADOR8("ARMA8JOGADOR","Livro de Magias"),
-    ARMADILHA("ARMADILHA","Armadilha"),
-    ARMALIDER("ARMALIDER","Machado duplo")
+    ESPADA("Espada","jogador"),
+    MACHADO("Machado","jogador"),
+    MARTELO("Martelo","jogador"),
+    CLAVA("Clava","jogador"),
+    ARCO("Arco","jogador"),
+    BESTA("Besta","jogador"),
+    CAJADO("Cajado","jogador"),
+    LIVRO_MAGIAS("Livro de magias","jogador"),
+    ARMADILHA("Armadilha","armadilha"),
+    MACHADO_DUPLO("Machado duplo","lider")
     ;
 
     private final String value;
     private final String displayName;
 
-    EnumArma(String arma, String tipo) {
+    EnumArma(String arma, String tipoArma) {
         this.value = arma;
-        this.displayName = tipo;
+        this.displayName = tipoArma;
     }
 
     @Override
