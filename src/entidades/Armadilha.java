@@ -1,5 +1,7 @@
 package entidades;
 
+import dados.Dado;
+
 public class Armadilha implements Atacante{
 
     private int pontosAtaque;
@@ -14,10 +16,6 @@ public class Armadilha implements Atacante{
         return pontosAtaque;
     }
 
-    public void setPontosAtaque(int pontosAtaque) {
-        this.pontosAtaque = pontosAtaque;
-    }
-
     public EnumArma getArma() {
         return arma;
     }
@@ -28,6 +26,13 @@ public class Armadilha implements Atacante{
 
     @Override
     public void atacar(Personagem personagem) {
-        personagem.pontosSaude -= this.getPontosAtaque();
+        int valorDado = Dado.jogarDado();
+        int ataqueTotal = this.getPontosAtaque()+arma.getValorAtaque()+ valorDado;
+        if(valorDado==1){
+            System.out.println("O ataque da armadilha pegou de raspão e você não sofreu dano.");
+        }else {
+            personagem.setPontosSaude(personagem.getPontosSaude() - (ataqueTotal - personagem.getPontosDefesa()));
+            System.out.printf("Você sofreu %d de dano e agora possui %d pontos de vida.",ataqueTotal,personagem.getPontosSaude());
+        }
     }
 }
