@@ -5,6 +5,8 @@ import classesdecombate.Guerreiro;
 import classesdecombate.Mago;
 import classesdecombate.Paladino;
 import entidades.EnumArma;
+import entidades.EnumMotivacao;
+import entidades.Jogador;
 
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ public class BatalhaFinal {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Seja bem vindo(a) à BATALHA FINAL!");
+
         // TODO: solicitar ao jogador um nome para o personagem.
         System.out.print("Digite um nome para o personagem: ");
         String nome = sc.nextLine();
@@ -22,13 +25,65 @@ public class BatalhaFinal {
         String sexo = sc.next();
         // TODO: solicitar ao jogador qual a classe do personagem.
         //       Guerreiro, Paladino, Arqueiro, Mago.
-
         // TODO: solicitar ao jogador qual arma o personagem vai usar,
         //       dentre as opções disponíveis para a classe selecionada.
-
         // TODO: instanciar um novo objeto da classe selecionada pelo jogador,
         //       passando como argumentos os valores coletados.
-
+        System.out.println("Selecione a Classe do Jogador: \n 1 - Guerreiro \n 2 - Paladino \n 3 - Arqueiro \n 4 - Mago \n");
+        System.out.print("Selecione a opção desejada: ");
+        int opcaoClasse = sc.nextInt();
+        Jogador jogador = null;
+        int opcaoArma = -1;
+        switch (opcaoClasse) {
+            case 1:
+                System.out.println("Selecione a arma: \n 1 - Espada \n 2 - Machado \n");
+                System.out.println("digite a opção desejada: ");
+                opcaoArma = sc.nextInt();
+                if (opcaoArma == 1) {
+                    jogador = new Guerreiro(nome, sexo, EnumArma.ESPADA);
+                } else if (opcaoArma == 2) {
+                    jogador = new Guerreiro(nome, sexo, EnumArma.MACHADO);
+                } else {
+                    System.out.println("Opção inválida!");
+                }
+                break;
+            case 2:
+                System.out.println("Selecione a arma: \n 1 - Martelo \n 2 - Clava \n");
+                System.out.println("digite a opção desejada: ");
+                opcaoArma = sc.nextInt();
+                if (opcaoArma == 1) {
+                    jogador = new Paladino(nome, sexo, EnumArma.MARTELO);
+                } else if (opcaoArma == 2) {
+                    jogador = new Paladino(nome, sexo, EnumArma.CLAVA);
+                } else {
+                    System.out.println("Opção inválida!");
+                }
+                break;
+            case 3:
+                System.out.println("Selecione a arma: \n 1 - Arco \n 2 - Besta \n");
+                System.out.println("digite a opção desejada: ");
+                opcaoArma = sc.nextInt();
+                if (opcaoArma == 1) {
+                    jogador = new Arqueiro(nome, sexo, EnumArma.ARCO);
+                } else if (opcaoArma == 2) {
+                    jogador = new Arqueiro(nome, sexo, EnumArma.BESTA);
+                } else {
+                    System.out.println("Opção inválida!");
+                }
+                break;
+            case 4:
+                System.out.println("Selecione a arma: \n 1 - Cajado \n 2 - Livro de Magias \n");
+                System.out.println("digite a opção desejada: ");
+                opcaoArma = sc.nextInt();
+                if (opcaoArma == 1) {
+                    jogador = new Mago(nome, sexo, EnumArma.MARTELO);
+                } else if (opcaoArma == 2) {
+                    jogador = new Mago(nome, sexo, EnumArma.CLAVA);
+                } else {
+                    System.out.println("Opção inválida!");
+                }
+                break;
+        }
 
         System.out.println("A noite se aproxima, a lua já surge no céu, estrelas vão se acendendo,\n"
                 + "e sob a luz do crepúsculo você está prestes a entrar na fase final da sua missão.\n"
@@ -45,45 +100,69 @@ public class BatalhaFinal {
         //       por que o personagem está nessa missão de destruir os inimigos?
         //       Vingança ou Glória?
 
+        System.out.println("Escolha sua motivação: \n1 - Vingança \n2 - Glória \n");
+        System.out.print("Selecione a opção desejada: ");
+        int opcaoMotivacao = sc.nextInt();
+        if (opcaoMotivacao == 1) {
+            jogador.setMotivacao(EnumMotivacao.VINGANCA);
+        } else if (opcaoMotivacao == 2) {
+            jogador.setMotivacao(EnumMotivacao.GLORIA);
+        } else {
+            System.out.println("Opção inválida!");
+        }
         // TODO: if (motivação do jogador == VINGANÇA)
-        System.out.println("Imagens daquela noite trágica invadem sua mente.\n"
-                + "Você nem precisa se esforçar para lembrar, pois essas memórias estão sempre presentes,\n"
-                + "mesmo que de pano de fundo, quando você tem outros pensamentos em foco, elas nunca o deixaram.\n"
-                + "Elas são o combustível que te fizeram chegar até aqui.\n"
-                + "E você sabe que não irá desistir até ter vingado a morte\n"
-                + "daqueles que foram - e pra sempre serão - sua fonte de amor e desejo de continuar vivo.\n"
-                + "O maldito líder finalmente pagará por tanto mal causado na vida de tantos\n"
-                + "(e principalmente na sua).");
+        if(jogador.getMotivacao() == EnumMotivacao.VINGANCA) {
+            System.out.println("Imagens daquela noite trágica invadem sua mente.\n"
+                    + "Você nem precisa se esforçar para lembrar, pois essas memórias estão sempre presentes,\n"
+                    + "mesmo que de pano de fundo, quando você tem outros pensamentos em foco, elas nunca o deixaram.\n"
+                    + "Elas são o combustível que te fizeram chegar até aqui.\n"
+                    + "E você sabe que não irá desistir até ter vingado a morte\n"
+                    + "daqueles que foram - e pra sempre serão - sua fonte de amor e desejo de continuar vivo.\n"
+                    + "O maldito líder finalmente pagará por tanto mal causado na vida de tantos\n"
+                    + "(e principalmente na sua).");
+        }
         // TODO else
-        System.out.println("Você já consegue visualizar na sua mente o povo da cidade te recebendo de braços abertos,\n"
-                + "bardos criando canções sobre seus feitos heróicos, nobres te presenteando com jóias e diversas riquezas,\n"
-                + "taberneiros se recusando a cobrar por suas bebedeiras e comilanças.\n"
-                + "Desde já, você sente o amor do público, te louvando a cada passo que dá pelas ruas,\n"
-                + "depois de destruir o vilão que tanto assombrou a paz de todos.\n"
-                + "Porém, você sabe que ainda falta o último ato dessa história.\n"
-                + "Você se concentra na missão.\n"
-                + "A glória o aguarda, mas não antes da última batalha.");
+        else {
+            System.out.println("Você já consegue visualizar na sua mente o povo da cidade te recebendo de braços abertos,\n"
+                    + "bardos criando canções sobre seus feitos heróicos, nobres te presenteando com jóias e diversas riquezas,\n"
+                    + "taberneiros se recusando a cobrar por suas bebedeiras e comilanças.\n"
+                    + "Desde já, você sente o amor do público, te louvando a cada passo que dá pelas ruas,\n"
+                    + "depois de destruir o vilão que tanto assombrou a paz de todos.\n"
+                    + "Porém, você sabe que ainda falta o último ato dessa história.\n"
+                    + "Você se concentra na missão.\n"
+                    + "A glória o aguarda, mas não antes da última batalha.");
 
-        System.out.println("Inspirado pelo motivo que te trouxe até aqui, você sente seu coração ardendo em chamas,\n"
-                + "suas mãos formigarem em volta da sua arma. Você a segura com firmeza. Seu foco está renovado.\n"
-                + "Você avança pelo portal.");
+            System.out.println("Inspirado pelo motivo que te trouxe até aqui, você sente seu coração ardendo em chamas,\n"
+                    + "suas mãos formigarem em volta da sua arma. Você a segura com firmeza. Seu foco está renovado.\n"
+                    + "Você avança pelo portal.");
 
-        System.out.println("A escuridão te envolve. Uma iluminação muito fraca entra pelo portal às suas costas.\n"
-                + "À sua frente, só é possível perceber que você se encontra em um corredor extenso.\n"
-                + "Você só pode ir à frente, ou desistir.");
-
+            System.out.println("A escuridão te envolve. Uma iluminação muito fraca entra pelo portal às suas costas.\n"
+                    + "À sua frente, só é possível perceber que você se encontra em um corredor extenso.\n"
+                    + "Você só pode ir à frente, ou desistir.");
+        }
         // TODO: perguntar ao jogador se o personagem segue em frente ou desiste
         // TODO: if (desiste)
-        System.out.println("O medo invade o seu coração e você sente que ainda não está à altura do desafio.\n"
-                + "Você se volta para a noite lá fora, e corre em direção à segurança.");
-        // TODO: encerrar a execução do programa: System.exit(0);
+        boolean desiste = false;
+        System.out.println("Você deseja seguir em frente ou desistir?");
+        System.out.println("1 - Seguir em Frente\n2 - Desistir\n");
+        int opcaoDesistir = sc.nextInt();
+        if(opcaoDesistir == 1){desiste = false;}else if(opcaoDesistir==2){desiste = true;}else{
+            System.out.println("Opção inválida!");
+        }
+        if(desiste) {
+            System.out.println("O medo invade o seu coração e você sente que ainda não está à altura do desafio.\n"
+                    + "Você se volta para a noite lá fora, e corre em direção à segurança.");
+            // TODO: encerrar a execução do programa: System.exit(0);
+            System.exit(0);
+        }
+        else {
+            System.out.println("Você caminha, atento a todos os seus sentidos, por vários metros,\n"
+                    + "até visualizar a frente uma fonte de luz, que você imagina ser a chama de uma tocha,\n"
+                    + "vindo de dentro de uma porta aberta.");
 
-        System.out.println("Você caminha, atento a todos os seus sentidos, por vários metros,\n"
-                + "até visualizar a frente uma fonte de luz, que você imagina ser a chama de uma tocha,\n"
-                + "vindo de dentro de uma porta aberta.");
-
-        System.out.println("Você se pergunta se dentro dessa sala pode haver inimigos, ou alguma armadilha,\n"
-                + "e pondera sobre como passar pela porta.");
+            System.out.println("Você se pergunta se dentro dessa sala pode haver inimigos, ou alguma armadilha,\n"
+                    + "e pondera sobre como passar pela porta.");
+        }
         // TODO: perguntar ao jogador se deseja passar pela porta ANDANDO CUIDADOSAMENTE, CORRENDO ou SALTANDO.
         // TODO: if SALTANDO
         System.out.println("Você se concentra e pula em direção à luz, saltando de antes da porta até o interior da sala.");
