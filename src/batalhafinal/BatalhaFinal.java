@@ -1,18 +1,34 @@
 package batalhafinal;
 
+import classesdecombate.Arqueiro;
+import classesdecombate.Guerreiro;
+import classesdecombate.Mago;
+import classesdecombate.Paladino;
+import entidades.EnumArma;
+
+import java.util.Scanner;
+
 public class BatalhaFinal {
 
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
         System.out.println("Seja bem vindo(a) à BATALHA FINAL!");
         // TODO: solicitar ao jogador um nome para o personagem.
+        System.out.print("Digite um nome para o personagem: ");
+        String nome = sc.nextLine();
         // TODO: solicitar ao jogador um sexo para o personagem.
         //       M ou F.
+        System.out.print("Digite o sexo para o personagem (M ou F): ");
+        String sexo = sc.next();
         // TODO: solicitar ao jogador qual a classe do personagem.
         //       Guerreiro, Paladino, Arqueiro, Mago.
+
         // TODO: solicitar ao jogador qual arma o personagem vai usar,
         //       dentre as opções disponíveis para a classe selecionada.
+
         // TODO: instanciar um novo objeto da classe selecionada pelo jogador,
         //       passando como argumentos os valores coletados.
+
 
         System.out.println("A noite se aproxima, a lua já surge no céu, estrelas vão se acendendo,\n"
                 + "e sob a luz do crepúsculo você está prestes a entrar na fase final da sua missão.\n"

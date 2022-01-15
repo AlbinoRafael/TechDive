@@ -6,12 +6,13 @@ import entidades.Jogador;
 import entidades.Personagem;
 
 public class Mago extends Jogador {
-    public Mago(int pontosSaude, int pontosAtaque, int pontosDefesa, String nome, char sexo, EnumMotivacao motivacao, EnumArma arma) {
-        super(pontosSaude, pontosAtaque, pontosDefesa, nome, sexo, motivacao, arma);
+    public Mago(String nome, String sexo,EnumArma arma) {
+        super(19, 11, nome, sexo);
+        this.setArma(arma);
     }
 
     @Override
     public void atacar(Personagem personagem) {
-        personagem.setPontosSaude(personagem.getPontosSaude()-(this.getPontosAtaque()- personagem.getPontosDefesa()));
+
     }
 }

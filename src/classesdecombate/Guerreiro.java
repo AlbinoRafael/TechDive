@@ -1,17 +1,17 @@
 package classesdecombate;
 
 import entidades.EnumArma;
-import entidades.EnumMotivacao;
 import entidades.Jogador;
 import entidades.Personagem;
 
 public class Guerreiro extends Jogador {
-    public Guerreiro(int pontosSaude, int pontosAtaque, int pontosDefesa, String nome, char sexo, EnumMotivacao motivacao, EnumArma arma) {
-        super(pontosSaude, pontosAtaque, pontosDefesa, nome, sexo, motivacao, arma);
+    public Guerreiro(String nome, String sexo, EnumArma arma) {
+        super(15, 15, nome, sexo);
+        this.setArma(arma);
     }
 
     @Override
     public void atacar(Personagem personagem) {
-        personagem.setPontosSaude(personagem.getPontosSaude()-(this.getPontosAtaque()- personagem.getPontosDefesa()));
+
     }
 }

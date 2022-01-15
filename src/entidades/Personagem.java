@@ -6,7 +6,7 @@ public abstract class Personagem {
     protected int pontosAtaque;
     protected int pontosDefesa;
 
-    private Personagem(){}
+    public Personagem(){}
 
     public Personagem(int pontosSaude, int pontosAtaque, int pontosDefesa) {
         this.pontosSaude = pontosSaude;
