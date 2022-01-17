@@ -4,11 +4,11 @@ import java.util.Random;
 
 public class Dado {
 
-    public Dado(){
+    private Dado(){
     }
-    public static int jogarDado(){
+    public static int jogarDado(int min, int max){
         Random random = new Random();
-        int valor = random.nextInt(10+1)+1;
+        int valor = random.nextInt((max-min)+min);
         return valor;
     }
 }

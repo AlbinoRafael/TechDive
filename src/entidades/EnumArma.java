@@ -1,38 +1,35 @@
 package entidades;
 
-public enum EnumArma implements StringValueEnum{
+public enum EnumArma{
 
-    ESPADA("Espada","jogador",5),
-    MACHADO("Machado","jogador",5),
-    MARTELO("Martelo","jogador",5),
-    CLAVA("Clava","jogador",5),
-    ARCO("Arco","jogador",5),
-    BESTA("Besta","jogador",5),
-    CAJADO("Cajado","jogador",5),
-    LIVRO_MAGIAS("Livro de magias","jogador",5),
-    ARMADILHA("Armadilha","armadilha",2),
-    MACHADO_DUPLO("Machado duplo","lider",7)
+    ESPADA("Espada",5,null),
+    MACHADO("Machado",5,null),
+    MARTELO("Martelo",5,null),
+    CLAVA("Clava",5,null),
+    ARCO("Arco",5,"Flecha"),
+    BESTA("Besta",5,"Virote"),
+    CAJADO("Cajado",5,null),
+    LIVRO_MAGIAS("Livro de magias",5,null),
+    ARMADILHA("Armadilha",2,null),
+    MACHADO_DUPLO("Machado duplo",7,null)
     ;
 
     private final String value;
-    private final String displayName;
     private final int valorAtaque;
+    private final String municao;
 
-    EnumArma(String arma, String tipoArma, int valorAtaque) {
+
+    EnumArma(String arma, int valorAtaque, String municao) {
         this.value = arma;
-        this.displayName = tipoArma;
         this.valorAtaque = valorAtaque;
+        this.municao = municao;
     }
-
-    @Override
     public String getValue() {
         return value;
     }
 
-    @Override
-    public String getDisplayName() {
-        return displayName;
+    public String getMunicao() {
+        return municao;
     }
-
     public int getValorAtaque(){return valorAtaque;}
 }
