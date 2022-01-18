@@ -1,8 +1,10 @@
 package banco.contas;
 
+import banco.cliente.Cliente;
+
 public class ContaPoupanca extends Conta{
 
-    public ContaPoupanca(String nomeTitular, String cpf) {
-        super(nomeTitular, cpf);
+    public ContaPoupanca(Cliente cliente) {
+        super(cliente);
     }
 }

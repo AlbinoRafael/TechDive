@@ -1,18 +1,18 @@
 package banco.contas;
 
+import banco.cliente.Cliente;
+
 public abstract class Conta {
 
     public static int id = 1;
     private int idConta;
-    private String nomeTitular;
-    private String cpf;
+    private Cliente cliente;
 
     private Conta(){}
 
-    public Conta(String nomeTitular, String cpf) {
+    public Conta(Cliente cliente) {
         this.idConta = id;
-        this.nomeTitular = nomeTitular;
-        this.cpf = cpf;
+        this.cliente = cliente;
         id++;
     }
 
@@ -20,23 +20,11 @@ public abstract class Conta {
         return idConta;
     }
 
-    public void setIdConta(int idConta) {
-        this.idConta = idConta;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public String getNomeTitular() {
-        return nomeTitular;
-    }
-
-    public void setNomeTitular(String nomeTitular) {
-        this.nomeTitular = nomeTitular;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public String toString(){
+        return "Nome do titular: "+getCliente().getNomeDoTitular();
     }
 }
