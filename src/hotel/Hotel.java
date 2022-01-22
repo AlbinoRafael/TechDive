@@ -91,7 +91,7 @@ public class Hotel {
         LocalDate fimAltaTemporada = LocalDate.parse("31-03-" + LocalDate.now().getYear() + 1, dtf);
         for (Quarto quarto : quartos) {
             if (quarto.getNumeroQuarto() == reserva.getQuarto().getNumeroQuarto()) {
-                if (reserva.getDataAgendamento().isAfter(fimAltaTemporada) && reserva.getDataAgendamento().isBefore(inicioAltaTemporada)) {
+                if (reserva.getDataAgendamento().isAfter(inicioAltaTemporada) && reserva.getDataAgendamento().isBefore(fimAltaTemporada)) {
                     if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SIMPLES)) {
                         reserva.getQuarto().setValorDiaria(140);
                     } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
