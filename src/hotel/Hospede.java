@@ -8,14 +8,12 @@ public class Hospede implements Comparable<Hospede>{
     private String sobrenome;
     private String documentoIdentificacao;
     private String dataNascimento;
-    private EnumTipoQuarto tipoQuarto;
-
 
     public Hospede(String nome, String sobrenome, String documentoIdentificacao, String dataNascimento) {
-        this.nome = nome;
-        this.sobrenome = sobrenome;
-        this.documentoIdentificacao = documentoIdentificacao;
-        this.dataNascimento = dataNascimento;
+        if(nome!=null && !nome.isBlank()&& !nome.isEmpty()){this.nome = nome;}
+        if(sobrenome!=null && !sobrenome.isBlank()&& !sobrenome.isEmpty()){this.sobrenome = sobrenome;}
+        if(validaCPF(documentoIdentificacao)||validaRG(documentoIdentificacao)){this.documentoIdentificacao = documentoIdentificacao;}
+        if(validaDataNascimento(dataNascimento)){this.dataNascimento = dataNascimento;}
     }
 
     public String getNome() {
@@ -60,13 +58,72 @@ public class Hospede implements Comparable<Hospede>{
 
     @Override
     public String toString() {
-        return "nome: " + nome +'\n' +
-                "documentoIdentificacao: " + documentoIdentificacao + '\n' +
-                "data de nascimento: " + dataNascimento + '\n';
+        return nome +' '+sobrenome;
     }
 
     @Override
     public int compareTo(Hospede o) {
         return this.getNome().compareTo(o.getNome());
     }
+
+    public boolean validaCPF(String cpf) {
+        boolean isValido = false;
+        if (cpf.length() == 11 && cpf.matches("[+-]?\\d*(\\.\\d+)?") && !cpf.contains("^[a-zA-Z]") &&
+                !cpf.equals(null) && !cpf.isBlank() && !cpf.contains(" ")) {
+            int contador = 1;
+            char[] cpfs = cpf.toCharArray();
+            for (int i = 0; i < cpfs.length - 1; i++) {
+                if (cpfs[i] == cpfs[i + 1]) {
+                    contador++;
+                }
+            }
+            if (contador == cpf.length()) {
+                isValido = false;
+            } else {
+                isValido = true;
+            }
+        }
+        return isValido;
+    }
+
+    public boolean validaRG(String rg) {
+        boolean isValido = false;
+        if (rg.length() == 8 && rg.matches("[+-]?\\d*(\\.\\d+)?") && !rg.contains("^[a-zA-Z]") &&
+                !rg.equals(null) && !rg.isBlank() && !rg.contains(" ")) {
+            int contador = 1;
+            char[] rgs = rg.toCharArray();
+            for (int i = 0; i < rgs.length - 1; i++) {
+                if (rgs[i] == rgs[i + 1]) {
+                    contador++;
+                }
+            }
+            if (contador == rg.length()) {
+                isValido = false;
+            } else {
+                isValido = true;
+            }
+        }
+        return isValido;
+    }
+
+    public boolean validaDataNascimento(String dataNascimento) {
+        boolean isValido = false;
+        if (dataNascimento.length() == 10 && !dataNascimento.contains("^[a-zA-Z]") &&
+                !dataNascimento.equals(null) && !dataNascimento.isBlank() && !dataNascimento.contains(" ")) {
+            int contador = 1;
+            char[] rgs = dataNascimento.toCharArray();
+            for (int i = 0; i < rgs.length - 1; i++) {
+                if (rgs[i] == rgs[i + 1]) {
+                    contador++;
+                }
+            }
+            if (contador == dataNascimento.length()) {
+                isValido = false;
+            } else {
+                isValido = true;
+            }
+        }
+        return isValido;
+    }
+
 }

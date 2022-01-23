@@ -7,6 +7,7 @@ import hotel.util.Menu;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -58,6 +59,7 @@ public class Hotel {
 
     public static void main(String[] args) {
 
+        Menu.menuPrincipal();
 
     }
 
@@ -88,7 +90,7 @@ public class Hotel {
     public static void registraReserva(Reserva reserva) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate inicioAltaTemporada = LocalDate.parse("01-10-" + LocalDate.now().getYear(), dtf);
-        LocalDate fimAltaTemporada = LocalDate.parse("31-03-" + LocalDate.now().getYear() + 1, dtf);
+        LocalDate fimAltaTemporada = LocalDate.parse("31-03-" + LocalDate.now().plusYears(1).getYear(), dtf);
         for (Quarto quarto : quartos) {
             if (quarto.getNumeroQuarto() == reserva.getQuarto().getNumeroQuarto()) {
                 if (reserva.getDataAgendamento().isAfter(inicioAltaTemporada) && reserva.getDataAgendamento().isBefore(fimAltaTemporada)) {
@@ -106,6 +108,7 @@ public class Hotel {
                 }
                 quarto.setEstaDisponivel(false);
                 reservas.add(reserva);
+                System.out.println("\nReserva feita para "+reserva.getHospede()+", quarto Nº: "+reserva.getQuarto().getNumeroQuarto()+"\n");
             }
         }
     }

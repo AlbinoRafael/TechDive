@@ -61,9 +61,7 @@ public class Quarto {
 
     @Override
     public String toString() {
-        return "numero do quarto: " + numeroQuarto +
-                ", esta disponivel: " + estaDisponivel +
-                ", valor da diaria: " + valorDiaria +
+        return "quarto Nº: " + numeroQuarto +
                 ", tipo do quarto: " + tipoQuarto.getTipo();
     }
 }

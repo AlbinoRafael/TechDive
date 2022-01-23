@@ -18,17 +18,39 @@ public class Listar {
         List<Hospede>listaDeHospedes = new ArrayList<>(Hotel.getHospedes());
         Collections.sort(listaDeHospedes);
         for (Hospede h : listaDeHospedes) {
-            retorno += "\n"+index+" - "+h.getNome();
+            retorno += "\n"+index+" - "+h.toString();
             index++;
         }
         return retorno;
     }
     public static String listaQuartos(){
-        String retorno = "";
+        String retorno = "\nLista de todos os Quartos\n";
         int index = 1;
         for(Quarto q: Hotel.getQuartos()){
             retorno+="\n"+index+" - "+q.toString();
             index++;
+        }
+        return retorno;
+    }
+    public static String listaQuartosDisponiveis(){
+        String retorno = "\nLista de quartos disponíveis\n";
+        int index = 1;
+        for(Quarto q: Hotel.getQuartos()){
+            if(q.isEstaDisponivel()){
+                retorno+="\n"+index+" - "+q.toString();
+                index++;
+            }
+        }
+        return retorno;
+    }
+    public static String listaQuartosNaoDisponiveis(){
+        String retorno = "\nLista de quartos não disponíveis\n";
+        int index = 1;
+        for(Quarto q: Hotel.getQuartos()){
+            if(!q.isEstaDisponivel()){
+                retorno+="\n"+index+" - "+q.toString();
+                index++;
+            }
         }
         return retorno;
     }
@@ -44,14 +66,16 @@ public class Listar {
     public static Hospede escolheHospede(List<Hospede>hospedes){
         Scanner sc = new Scanner(System.in);
         System.out.println(listaHospedes());
+        List<Hospede> hospedesOrdenados = new ArrayList<>(Hotel.getHospedes());
+        Collections.sort(hospedesOrdenados);
         System.out.print("Selecione o hospede: ");
         int op = sc.nextInt();
-        return hospedes.get(op-1);
+        return hospedesOrdenados.get(op-1);
     }
     public static Quarto escolheQuarto(List<Quarto>quartos){
         Scanner sc = new Scanner(System.in);
         System.out.println(listaQuartos());
-        System.out.print("Selecione o hospede: ");
+        System.out.print("Selecione o quarto: ");
         int op = sc.nextInt();
         return Hotel.getQuartos().get(op-1);
     }
