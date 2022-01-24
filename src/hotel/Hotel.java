@@ -1,17 +1,13 @@
 package hotel;
 
 import hotel.agenda.Reserva;
-import hotel.util.Listar;
 import hotel.util.Menu;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class Hotel {
 
@@ -42,25 +38,56 @@ public class Hotel {
         adicionaQuarto(quarto204);
         adicionaQuarto(quarto205);
     }
-
     static {
         Hospede hospede1 = new Hospede("Joao", "da Silva", "12312312345", "02-04-1985");
         Hospede hospede2 = new Hospede("Pedro", "de Souza", "32132132154", "22-01-1990");
         Hospede hospede3 = new Hospede("Maria", "Moreira", "12332145678", "16-04-1954");
         Hospede hospede4 = new Hospede("Marcos", "Pereira", "65465465412", "30-09-1978");
         Hospede hospede5 = new Hospede("Joana", "da Fonseca", "14514514589", "15-11-1960");
+        Hospede hospede6 = new Hospede("Frederico", "de Sá", "98798798765", "09-10-1958");
+        Hospede hospede7 = new Hospede("Paulo", "da Costa", "98745632109", "16-12-1965");
+        Hospede hospede8 = new Hospede("Mariana", "Oliveira", "14714714790", "30-11-1998");
+        Hospede hospede9 = new Hospede("Joaquina", "Cruz", "25825825880", "03-01-1996");
+        Hospede hospede10 = new Hospede("Ismael", "dos Santos", "36936936999", "18-07-1986");
 
         adicionaHospede(hospede1);
         adicionaHospede(hospede2);
         adicionaHospede(hospede3);
         adicionaHospede(hospede4);
         adicionaHospede(hospede5);
+        adicionaHospede(hospede6);
+        adicionaHospede(hospede7);
+        adicionaHospede(hospede8);
+        adicionaHospede(hospede9);
+        adicionaHospede(hospede10);
+    }
+    static {
+        Reserva reserva1 = new Reserva(hospedes.get(0),quartos.get(0),"10-05-2022","15-05-2022");
+        Reserva reserva2 = new Reserva(hospedes.get(1),quartos.get(1),"20-05-2022","23-05-2022");
+        Reserva reserva3 = new Reserva(hospedes.get(2),quartos.get(2),"04-06-2022","08-06-2022");
+        Reserva reserva4 = new Reserva(hospedes.get(3),quartos.get(3),"17-08-2022","26-08-2022");
+        Reserva reserva5 = new Reserva(hospedes.get(4),quartos.get(4),"11-10-2022","15-10-2022");
+        Reserva reserva6 = new Reserva(hospedes.get(5),quartos.get(5),"25-12-2022","03-01-2023");
+        Reserva reserva7 = new Reserva(hospedes.get(6),quartos.get(6),"12-05-2022","18-05-2022");
+        Reserva reserva8 = new Reserva(hospedes.get(7),quartos.get(7),"03-02-2023","15-02-2023");
+        Reserva reserva9 = new Reserva(hospedes.get(8),quartos.get(8),"06-03-2023","15-03-2023");
+        Reserva reserva10 = new Reserva(hospedes.get(9),quartos.get(9),"19-04-2023","23-04-2023");
+
+        adicionaReserva(reserva1);
+        adicionaReserva(reserva2);
+        adicionaReserva(reserva3);
+        adicionaReserva(reserva4);
+        adicionaReserva(reserva5);
+        adicionaReserva(reserva6);
+        adicionaReserva(reserva7);
+        adicionaReserva(reserva8);
+        adicionaReserva(reserva9);
+        adicionaReserva(reserva10);
+
     }
 
     public static void main(String[] args) {
-
         Menu.menuPrincipal();
-
     }
 
     public static List<Quarto> getQuartos() {
@@ -87,6 +114,14 @@ public class Hotel {
         hospedes.remove(hospede);
     }
 
+    private static void adicionaReserva(Reserva reserva) {
+        reservas.add(reserva);
+    }
+
+    public static void removeReserva(Reserva reserva) {
+        reservas.remove(reserva);
+    }
+
     public static void registraReserva(Reserva reserva) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate inicioAltaTemporada = LocalDate.parse("01-10-" + LocalDate.now().getYear(), dtf);
@@ -107,6 +142,11 @@ public class Hotel {
                     }
                 }
                 quarto.setEstaDisponivel(false);
+                for(Hospede hospede:hospedes){
+                    if (hospede.getDocumentoIdentificacao() == reserva.getHospede().getDocumentoIdentificacao()) {
+                        hospede.setTemReserva(true);
+                    }
+                }
                 reservas.add(reserva);
                 System.out.println("\nReserva feita para "+reserva.getHospede()+", quarto Nº: "+reserva.getQuarto().getNumeroQuarto()+"\n");
             }

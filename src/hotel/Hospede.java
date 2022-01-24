@@ -1,13 +1,12 @@
 package hotel;
 
-import java.util.Objects;
-
 public class Hospede implements Comparable<Hospede>{
 
     private String nome;
     private String sobrenome;
     private String documentoIdentificacao;
     private String dataNascimento;
+    private boolean temReserva;
 
     public Hospede(String nome, String sobrenome, String documentoIdentificacao, String dataNascimento) {
         if(nome!=null && !nome.isBlank()&& !nome.isEmpty()){this.nome = nome;}
@@ -46,6 +45,14 @@ public class Hospede implements Comparable<Hospede>{
 
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public boolean temReserva() {
+        return temReserva;
+    }
+
+    public void setTemReserva(boolean temReserva) {
+        this.temReserva = temReserva;
     }
 
     @Override
