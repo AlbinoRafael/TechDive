@@ -8,7 +8,6 @@ public class Quarto {
     private int numeroQuarto;
     private boolean estaDisponivel;
     private int valorDiaria;
-    private LocalDate dataReserva;
     private EnumTipoQuarto tipoQuarto;
 
     public Quarto(int numeroQuarto, boolean estaDisponivel, EnumTipoQuarto tipoQuarto) {
@@ -19,14 +18,6 @@ public class Quarto {
 
     public int getNumeroQuarto() {
         return numeroQuarto;
-    }
-
-    private LocalDate getDataReserva(){
-        return this.dataReserva;
-    }
-
-    public void setDataReserva(LocalDate dataReserva){
-        this.dataReserva = dataReserva;
     }
 
     public boolean isEstaDisponivel() {
@@ -47,16 +38,6 @@ public class Quarto {
 
     public EnumTipoQuarto getTipoQuarto() {
         return tipoQuarto;
-    }
-
-    public void setTipoQuarto(EnumTipoQuarto tipoQuarto) {
-        this.tipoQuarto = tipoQuarto;
-    }
-
-    public String retornaDataReserva(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dataReservada = dtf.format(this.getDataReserva());
-        return dataReservada;
     }
 
     @Override

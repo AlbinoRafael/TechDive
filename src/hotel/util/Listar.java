@@ -75,8 +75,8 @@ public class Listar {
         }
         return retorno;
     }
-    public static String listaQuartosNaoDisponiveis(){
-        String retorno = "\nLista de quartos não disponíveis\n";
+    public static String listaQuartosOcupados(){
+        String retorno = "\nLista de quartos ocupados\n";
         int index = 1;
         for(Quarto q: Hotel.getQuartos()){
             if(!q.isEstaDisponivel()){

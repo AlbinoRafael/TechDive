@@ -120,25 +120,28 @@ public class Reserva {
                 this.getQuarto().setValorDiaria(140);
             } else if (this.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
                 this.getQuarto().setValorDiaria(400);
-            }
-        } else {
-            setDiasReserva();
-            if (this.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SIMPLES)) {
-                this.getQuarto().setValorDiaria(90);
-            } else if (this.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
-                this.getQuarto().setValorDiaria(150);
+            } else if (this.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SUPREMA)) {
+                this.getQuarto().setValorDiaria(800);
+            } else {
+                setDiasReserva();
+                if (this.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SIMPLES)) {
+                    this.getQuarto().setValorDiaria(90);
+                } else if (this.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
+                    this.getQuarto().setValorDiaria(150);
+                } else if (this.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SUPREMA)) {
+                    this.getQuarto().setValorDiaria(500);
+                }
+                setValorReserva();
+                System.out.println("\nSimulação de Reserva\n");
+
+                System.out.println("Data início: " + dtf.format(this.getDataAgendamento()));
+                System.out.println("Data fim: " + dtf.format(this.getDataFimAgendamento()));
+                System.out.println("Dias de estadia: " + this.getDiasReserva());
+                System.out.println("Valor total da Reserva: R$" + this.getValorReserva());
+                System.out.println("\n");
             }
         }
-        setValorReserva();
-        System.out.println("\nSimulação de Reserva\n");
-
-        System.out.println("Data início: "+dtf.format(this.getDataAgendamento()));
-        System.out.println("Data fim: "+dtf.format(this.getDataFimAgendamento()));
-        System.out.println("Dias de estadia: "+this.getDiasReserva());
-        System.out.println("Valor total da Reserva: R$"+this.getValorReserva());
-        System.out.println("\n");
     }
-
     @Override
     public String toString() {
         return "hospede: " + hospede.getNome() + " " + hospede.getSobrenome() +

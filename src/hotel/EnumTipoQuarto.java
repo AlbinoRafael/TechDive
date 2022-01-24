@@ -1,7 +1,7 @@
 package hotel;
 
 public enum EnumTipoQuarto {
-    SIMPLES("Simples"),LUXO("de Luxo");
+    SIMPLES("Simples"),LUXO("de Luxo"),SUPREMA("Suíte suprema");
 
     private String tipo;
 

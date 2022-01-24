@@ -197,7 +197,7 @@ public class Menu {
                 System.out.println(Listar.listaQuartosDisponiveis());
                 break;
             case 3:
-                System.out.println(Listar.listaQuartosNaoDisponiveis());
+                System.out.println(Listar.listaQuartosOcupados());
                 break;
             case 0:
                 break;

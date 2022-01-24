@@ -26,6 +26,11 @@ public class Hotel {
         Quarto quarto203 = new Quarto(203, true, EnumTipoQuarto.LUXO);
         Quarto quarto204 = new Quarto(204, true, EnumTipoQuarto.LUXO);
         Quarto quarto205 = new Quarto(205, true, EnumTipoQuarto.LUXO);
+        Quarto quarto301 = new Quarto(301,true,EnumTipoQuarto.SUPREMA);
+        Quarto quarto302 = new Quarto(302,true,EnumTipoQuarto.SUPREMA);
+        Quarto quarto303 = new Quarto(303,true,EnumTipoQuarto.SUPREMA);
+        Quarto quarto304 = new Quarto(304,true,EnumTipoQuarto.SUPREMA);
+        Quarto quarto305 = new Quarto(305,true,EnumTipoQuarto.SUPREMA);
 
         adicionaQuarto(quarto101);
         adicionaQuarto(quarto102);
@@ -37,7 +42,13 @@ public class Hotel {
         adicionaQuarto(quarto203);
         adicionaQuarto(quarto204);
         adicionaQuarto(quarto205);
+        adicionaQuarto(quarto301);
+        adicionaQuarto(quarto302);
+        adicionaQuarto(quarto303);
+        adicionaQuarto(quarto304);
+        adicionaQuarto(quarto305);
     }
+
     static {
         Hospede hospede1 = new Hospede("Joao", "da Silva", "12312312345", "02-04-1985");
         Hospede hospede2 = new Hospede("Pedro", "de Souza", "32132132154", "22-01-1990");
@@ -61,17 +72,18 @@ public class Hotel {
         adicionaHospede(hospede9);
         adicionaHospede(hospede10);
     }
+
     static {
-        Reserva reserva1 = new Reserva(hospedes.get(0),quartos.get(0),"10-05-2022","15-05-2022");
-        Reserva reserva2 = new Reserva(hospedes.get(1),quartos.get(1),"20-05-2022","23-05-2022");
-        Reserva reserva3 = new Reserva(hospedes.get(2),quartos.get(2),"04-06-2022","08-06-2022");
-        Reserva reserva4 = new Reserva(hospedes.get(3),quartos.get(3),"17-08-2022","26-08-2022");
-        Reserva reserva5 = new Reserva(hospedes.get(4),quartos.get(4),"11-10-2022","15-10-2022");
-        Reserva reserva6 = new Reserva(hospedes.get(5),quartos.get(5),"25-12-2022","03-01-2023");
-        Reserva reserva7 = new Reserva(hospedes.get(6),quartos.get(6),"12-05-2022","18-05-2022");
-        Reserva reserva8 = new Reserva(hospedes.get(7),quartos.get(7),"03-02-2023","15-02-2023");
-        Reserva reserva9 = new Reserva(hospedes.get(8),quartos.get(8),"06-03-2023","15-03-2023");
-        Reserva reserva10 = new Reserva(hospedes.get(9),quartos.get(9),"19-04-2023","23-04-2023");
+        Reserva reserva1 = new Reserva(hospedes.get(0), quartos.get(0), "10-05-2022", "15-05-2022");
+        Reserva reserva2 = new Reserva(hospedes.get(1), quartos.get(1), "20-05-2022", "23-05-2022");
+        Reserva reserva3 = new Reserva(hospedes.get(2), quartos.get(2), "04-06-2022", "08-06-2022");
+        Reserva reserva4 = new Reserva(hospedes.get(3), quartos.get(3), "17-08-2022", "26-08-2022");
+        Reserva reserva5 = new Reserva(hospedes.get(4), quartos.get(4), "11-10-2022", "15-10-2022");
+        Reserva reserva6 = new Reserva(hospedes.get(5), quartos.get(5), "25-12-2022", "03-01-2023");
+        Reserva reserva7 = new Reserva(hospedes.get(6), quartos.get(6), "12-05-2022", "18-05-2022");
+        Reserva reserva8 = new Reserva(hospedes.get(7), quartos.get(7), "03-02-2023", "15-02-2023");
+        Reserva reserva9 = new Reserva(hospedes.get(8), quartos.get(10), "06-03-2023", "15-03-2023");
+        Reserva reserva10 = new Reserva(hospedes.get(9), quartos.get(13), "19-04-2023", "23-04-2023");
 
         adicionaReserva(reserva1);
         adicionaReserva(reserva2);
@@ -115,6 +127,11 @@ public class Hotel {
     }
 
     private static void adicionaReserva(Reserva reserva) {
+        for(Quarto q:quartos) {
+           if(reserva.getQuarto().getNumeroQuarto() == q.getNumeroQuarto()){
+               q.setEstaDisponivel(false);
+           }
+        }
         reservas.add(reserva);
     }
 
@@ -133,22 +150,26 @@ public class Hotel {
                         reserva.getQuarto().setValorDiaria(140);
                     } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
                         reserva.getQuarto().setValorDiaria(400);
-                    }
-                } else {
-                    if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SIMPLES)) {
-                        reserva.getQuarto().setValorDiaria(90);
-                    } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
-                        reserva.getQuarto().setValorDiaria(150);
+                    } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SUPREMA)) {
+                        reserva.getQuarto().setValorDiaria(800);
+                    } else {
+                        if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SIMPLES)) {
+                            reserva.getQuarto().setValorDiaria(90);
+                        } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
+                            reserva.getQuarto().setValorDiaria(150);
+                        } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SUPREMA)) {
+                            reserva.getQuarto().setValorDiaria(500);
+                        }
+                        quarto.setEstaDisponivel(false);
+                        for (Hospede hospede : hospedes) {
+                            if (hospede.getDocumentoIdentificacao() == reserva.getHospede().getDocumentoIdentificacao()) {
+                                hospede.setTemReserva(true);
+                            }
+                        }
+                        reservas.add(reserva);
+                        System.out.println("\nReserva feita para " + reserva.getHospede() + ", quarto Nº: " + reserva.getQuarto().getNumeroQuarto() + "\n");
                     }
                 }
-                quarto.setEstaDisponivel(false);
-                for(Hospede hospede:hospedes){
-                    if (hospede.getDocumentoIdentificacao() == reserva.getHospede().getDocumentoIdentificacao()) {
-                        hospede.setTemReserva(true);
-                    }
-                }
-                reservas.add(reserva);
-                System.out.println("\nReserva feita para "+reserva.getHospede()+", quarto Nº: "+reserva.getQuarto().getNumeroQuarto()+"\n");
             }
         }
     }
