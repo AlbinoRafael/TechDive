@@ -6,8 +6,6 @@ import hotel.agenda.Reserva;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -72,7 +70,7 @@ public class Menu {
                     continua = false;
                     try {
                         System.out.println("Selecione abaixo o hóspede e o quarto desejados: ");
-                        Reserva reserva = new Reserva(Listar.escolheHospede(Hotel.getHospedes()), Listar.escolheQuarto(Hotel.getQuartos()));
+                        Reserva reserva = new Reserva(Listar.escolheQuarto(Hotel.getQuartos()));
                         System.out.println("Você pode agendar um quarto a partir de " + dtf.format(LocalDate.now().plusDays(61)));
                         System.out.print("Digite a data para reserva(ex: 01-01-2022): ");
                         String dataReserva = sc.nextLine();
@@ -80,21 +78,18 @@ public class Menu {
                         String dataFimReserva = sc.nextLine();
                         if (dataReserva.length() == 10 && dataFimReserva.length() == 10) {
                             reserva.agendarReserva(dataReserva, dataFimReserva);
-                            Hotel.registraReserva(reserva);
                         } else {
                             System.err.println("A data que você inseriu é inválida! Siga o exemplo(01-01-2022)!");
                             continua = true;
                         }
                     } catch (NullPointerException e) {
+                        e.printStackTrace();
                         continua = true;
                     }
                 } while (continua);
                 break;
             case 2:
-                Reserva reservaParaCancelar = Listar.escolheReserva(Hotel.getReservas());
-                if (reservaParaCancelar != null) {
-                    Hotel.cancelaReserva(reservaParaCancelar);
-                }
+
                 break;
             case 3:
                 sc.nextLine();
@@ -102,14 +97,16 @@ public class Menu {
                 String dataAgenda = sc.nextLine();
                 System.out.print("Digite a data para o fim da reserva (ex: 01-01-2022):");
                 String dataFimAgenda = sc.nextLine();
-                Reserva reserva = new Reserva(Listar.escolheHospede(Hotel.getHospedes()), Listar.escolheQuarto(Hotel.getQuartos()));
-                reserva.simulaReserva(dataAgenda,dataFimAgenda);
+                Reserva reserva = new Reserva(Listar.escolheQuarto(Hotel.getQuartos()));
+                reserva.simulaReserva(dataAgenda, dataFimAgenda);
                 break;
             case 4:
                 dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                for(Reserva r:Hotel.getReservas()){
-                    System.out.println(r.toString());
-                    r.simulaReserva(dtf.format(r.getDataAgendamento()),dtf.format(r.getDataFimAgendamento()));
+                for (Hospede h : Hotel.getHospedes()) {
+                    for (Reserva r : h.getReservas()) {
+                        System.out.println(r.toString());
+                        r.simulaReserva(dtf.format(r.getDataAgendamento()), dtf.format(r.getDataFimAgendamento()));
+                    }
                 }
                 break;
             case 0:
@@ -155,18 +152,18 @@ public class Menu {
                 break;
             case 2:
                 System.out.println("Escolha o hóspede para ser removido: ");
-               Hospede hospede = Listar.escolheHospede(Hotel.getHospedes());
-               try {
-                   if (!hospede.temReserva()) {
-                       for (Hospede h : Hotel.getHospedes()) {
-                           if (hospede.getDocumentoIdentificacao().equals(h.getDocumentoIdentificacao())) {
-                               Hotel.removeHospede(hospede);
-                           }
-                       }
-                   }
-               }catch (Exception e){
-                   e.printStackTrace();
-               }
+                Hospede hospede = Listar.escolheHospede(Hotel.getHospedes());
+                try {
+                    if (hospede.getReservas().size() == 0) {
+                        for (Hospede h : Hotel.getHospedes()) {
+                            if (hospede.getDocumentoIdentificacao().equals(h.getDocumentoIdentificacao())) {
+                                Hotel.removeHospede(hospede);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 break;
             case 3:
                 System.out.println(Listar.listaTodosHospedes());
@@ -194,10 +191,10 @@ public class Menu {
                 System.out.println(Listar.listaQuartos());
                 break;
             case 2:
-                System.out.println(Listar.listaQuartosDisponiveis());
+                //System.out.println(Listar.listaQuartosDisponiveis());
                 break;
             case 3:
-                System.out.println(Listar.listaQuartosOcupados());
+                //System.out.println(Listar.listaQuartosOcupados());
                 break;
             case 0:
                 break;

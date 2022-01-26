@@ -1,33 +1,26 @@
 package hotel.agenda;
 
 import hotel.EnumTipoQuarto;
-import hotel.Hospede;
-import hotel.Hotel;
 import hotel.Quarto;
-import hotel.util.Listar;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
 
 public class Reserva {
 
     private LocalDate dataAgendamento;
     private LocalDate dataFimAgendamento;
-    private Hospede hospede;
     private Quarto quarto;
     private int valorReserva;
     private int diasReserva;
 
-    public Reserva(Hospede hospede, Quarto quarto) {
-        this.hospede = hospede;
+    public Reserva(Quarto quarto) {
         this.quarto = quarto;
     }
-    public Reserva(Hospede hospede, Quarto quarto, String dataInicio, String dataFinal){
+    public Reserva(Quarto quarto, String dataInicio, String dataFinal){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        this.hospede = hospede;
         this.quarto = quarto;
         this.dataAgendamento = LocalDate.parse(dataInicio, dtf);
         this.dataFimAgendamento = LocalDate.parse(dataFinal, dtf);
@@ -40,10 +33,8 @@ public class Reserva {
             LocalDate dataAgenda = LocalDate.parse(dataAgendamento, dtf);
             LocalDate dataFimAgenda = LocalDate.parse(dataFimAgendamento, dtf);
             if (dataAgenda.isAfter(LocalDate.now().plusDays(60)) && dataFimAgenda.isAfter(dataAgenda)) {
-                if (quarto.isEstaDisponivel()) {
                     this.dataAgendamento = dataAgenda;
                     this.dataFimAgendamento = dataFimAgenda;
-                }
             } else {
                 System.err.println("Você precisa agendar com pelo menos 60 dias de antecedência!");
             }
@@ -57,32 +48,13 @@ public class Reserva {
         return dataAgendamento;
     }
 
-    public void setDataAgendamento(LocalDate dataAgendamento) {
-        this.dataAgendamento = dataAgendamento;
-    }
 
     public LocalDate getDataFimAgendamento() {
         return dataFimAgendamento;
     }
 
-    public void setDataFimAgendamento(LocalDate dataFimAgendamento) {
-        this.dataFimAgendamento = dataFimAgendamento;
-    }
-
-    public Hospede getHospede() {
-        return hospede;
-    }
-
-    public void setHospede(Hospede hospede) {
-        this.hospede = hospede;
-    }
-
     public Quarto getQuarto() {
         return quarto;
-    }
-
-    public void setQuarto(Quarto quarto) {
-        this.quarto = quarto;
     }
 
     public int getValorReserva() {
@@ -104,9 +76,11 @@ public class Reserva {
     private int diasReserva(){
         return Period.between(dataAgendamento,dataFimAgendamento).getDays();
     }
+
     private int valorReserva(){
         return this.diasReserva()*this.getQuarto().getValorDiaria();
     }
+
     public void simulaReserva(String dataInicioReserva,String dataFimReserva){
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate inicioAltaTemporada = LocalDate.parse("01-10-" + LocalDate.now().getYear(), dtf);
@@ -144,7 +118,6 @@ public class Reserva {
     }
     @Override
     public String toString() {
-        return "hospede: " + hospede.getNome() + " " + hospede.getSobrenome() +
-                ", quarto: " + quarto.getNumeroQuarto();
+        return "quarto: " + quarto.getNumeroQuarto();
     }
 }

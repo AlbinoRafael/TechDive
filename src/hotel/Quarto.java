@@ -1,31 +1,19 @@
 package hotel;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
 public class Quarto {
 
     private int numeroQuarto;
-    private boolean estaDisponivel;
     private int valorDiaria;
     private EnumTipoQuarto tipoQuarto;
+    private String historico;
 
     public Quarto(int numeroQuarto, boolean estaDisponivel, EnumTipoQuarto tipoQuarto) {
         this.numeroQuarto = numeroQuarto;
-        this.estaDisponivel = estaDisponivel;
         this.tipoQuarto = tipoQuarto;
     }
 
     public int getNumeroQuarto() {
         return numeroQuarto;
-    }
-
-    public boolean isEstaDisponivel() {
-        return estaDisponivel;
-    }
-
-    public void setEstaDisponivel(boolean estaDisponivel) {
-        this.estaDisponivel = estaDisponivel;
     }
 
     public int getValorDiaria() {
@@ -38,6 +26,13 @@ public class Quarto {
 
     public EnumTipoQuarto getTipoQuarto() {
         return tipoQuarto;
+    }
+
+    public String getHistorico() {
+        return historico;
+    }
+    public void setHistorico(String historico){
+        this.historico = historico;
     }
 
     @Override

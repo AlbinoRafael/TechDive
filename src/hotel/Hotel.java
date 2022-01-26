@@ -13,7 +13,6 @@ public class Hotel {
 
     private static List<Quarto> quartos = new ArrayList<>();
     private static List<Hospede> hospedes = new ArrayList<>();
-    public static List<Reserva> reservas = new ArrayList<>();
 
     static {
         Quarto quarto101 = new Quarto(101, true, EnumTipoQuarto.SIMPLES);
@@ -71,30 +70,28 @@ public class Hotel {
         adicionaHospede(hospede8);
         adicionaHospede(hospede9);
         adicionaHospede(hospede10);
-    }
 
-    static {
-        Reserva reserva1 = new Reserva(hospedes.get(0), quartos.get(0), "10-05-2022", "15-05-2022");
-        Reserva reserva2 = new Reserva(hospedes.get(1), quartos.get(1), "20-05-2022", "23-05-2022");
-        Reserva reserva3 = new Reserva(hospedes.get(2), quartos.get(2), "04-06-2022", "08-06-2022");
-        Reserva reserva4 = new Reserva(hospedes.get(3), quartos.get(3), "17-08-2022", "26-08-2022");
-        Reserva reserva5 = new Reserva(hospedes.get(4), quartos.get(4), "11-10-2022", "15-10-2022");
-        Reserva reserva6 = new Reserva(hospedes.get(5), quartos.get(5), "25-12-2022", "03-01-2023");
-        Reserva reserva7 = new Reserva(hospedes.get(6), quartos.get(6), "12-05-2022", "18-05-2022");
-        Reserva reserva8 = new Reserva(hospedes.get(7), quartos.get(7), "03-02-2023", "15-02-2023");
-        Reserva reserva9 = new Reserva(hospedes.get(8), quartos.get(10), "06-03-2023", "15-03-2023");
-        Reserva reserva10 = new Reserva(hospedes.get(9), quartos.get(13), "19-04-2023", "23-04-2023");
+        Reserva reserva1 = new Reserva(quartos.get(0), "10-05-2022", "15-05-2022");
+        Reserva reserva2 = new Reserva(quartos.get(1), "20-05-2022", "23-05-2022");
+        Reserva reserva3 = new Reserva(quartos.get(2), "04-06-2022", "08-06-2022");
+        Reserva reserva4 = new Reserva(quartos.get(3), "17-08-2022", "26-08-2022");
+        Reserva reserva5 = new Reserva(quartos.get(4), "11-10-2022", "15-10-2022");
+        Reserva reserva6 = new Reserva(quartos.get(5), "25-12-2022", "03-01-2023");
+        Reserva reserva7 = new Reserva(quartos.get(6), "12-05-2022", "18-05-2022");
+        Reserva reserva8 = new Reserva(quartos.get(7), "03-02-2023", "15-02-2023");
+        Reserva reserva9 = new Reserva(quartos.get(10), "06-03-2023", "15-03-2023");
+        Reserva reserva10 = new Reserva(quartos.get(13), "19-04-2023", "23-04-2023");
 
-        adicionaReserva(reserva1);
-        adicionaReserva(reserva2);
-        adicionaReserva(reserva3);
-        adicionaReserva(reserva4);
-        adicionaReserva(reserva5);
-        adicionaReserva(reserva6);
-        adicionaReserva(reserva7);
-        adicionaReserva(reserva8);
-        adicionaReserva(reserva9);
-        adicionaReserva(reserva10);
+        hospede1.adicionaReserva(reserva1);
+        hospede2.adicionaReserva(reserva2);
+        hospede3.adicionaReserva(reserva3);
+        hospede4.adicionaReserva(reserva4);
+        hospede5.adicionaReserva(reserva5);
+        hospede6.adicionaReserva(reserva6);
+        hospede7.adicionaReserva(reserva7);
+        hospede8.adicionaReserva(reserva8);
+        hospede9.adicionaReserva(reserva9);
+        hospede10.adicionaReserva(reserva10);
 
     }
 
@@ -110,10 +107,6 @@ public class Hotel {
         return Collections.unmodifiableList(hospedes);
     }
 
-    public static List<Reserva> getReservas() {
-        return Collections.unmodifiableList(reservas);
-    }
-
     private static void adicionaQuarto(Quarto quarto) {
         quartos.add(quarto);
     }
@@ -124,64 +117,6 @@ public class Hotel {
 
     public static void removeHospede(Hospede hospede) {
         hospedes.remove(hospede);
-    }
-
-    private static void adicionaReserva(Reserva reserva) {
-        for(Quarto q:quartos) {
-           if(reserva.getQuarto().getNumeroQuarto() == q.getNumeroQuarto()){
-               q.setEstaDisponivel(false);
-           }
-        }
-        reservas.add(reserva);
-    }
-
-    public static void removeReserva(Reserva reserva) {
-        reservas.remove(reserva);
-    }
-
-    public static void registraReserva(Reserva reserva) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate inicioAltaTemporada = LocalDate.parse("01-10-" + LocalDate.now().getYear(), dtf);
-        LocalDate fimAltaTemporada = LocalDate.parse("31-03-" + LocalDate.now().plusYears(1).getYear(), dtf);
-        for (Quarto quarto : quartos) {
-            if (quarto.getNumeroQuarto() == reserva.getQuarto().getNumeroQuarto()) {
-                if (reserva.getDataAgendamento().isAfter(inicioAltaTemporada) && reserva.getDataAgendamento().isBefore(fimAltaTemporada)) {
-                    if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SIMPLES)) {
-                        reserva.getQuarto().setValorDiaria(140);
-                    } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
-                        reserva.getQuarto().setValorDiaria(400);
-                    } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SUPREMA)) {
-                        reserva.getQuarto().setValorDiaria(800);
-                    } else {
-                        if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SIMPLES)) {
-                            reserva.getQuarto().setValorDiaria(90);
-                        } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.LUXO)) {
-                            reserva.getQuarto().setValorDiaria(150);
-                        } else if (reserva.getQuarto().getTipoQuarto().equals(EnumTipoQuarto.SUPREMA)) {
-                            reserva.getQuarto().setValorDiaria(500);
-                        }
-                        quarto.setEstaDisponivel(false);
-                        for (Hospede hospede : hospedes) {
-                            if (hospede.getDocumentoIdentificacao() == reserva.getHospede().getDocumentoIdentificacao()) {
-                                hospede.setTemReserva(true);
-                            }
-                        }
-                        reservas.add(reserva);
-                        System.out.println("\nReserva feita para " + reserva.getHospede() + ", quarto Nº: " + reserva.getQuarto().getNumeroQuarto() + "\n");
-                    }
-                }
-            }
-        }
-    }
-
-    public static void cancelaReserva(Reserva reserva) {
-        for (Quarto quarto : quartos) {
-            if (quarto.getNumeroQuarto() == reserva.getQuarto().getNumeroQuarto()) {
-                quarto.setEstaDisponivel(true);
-                reservas.remove(reserva);
-            }
-        }
-
     }
 
 }
