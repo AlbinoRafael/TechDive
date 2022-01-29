@@ -1,0 +1,8 @@
+1;0.0;Joao Pedro
+2;0.0;Maria José
+3;0.0;Antonio Souza
+4;0.0;Ana Maria da Silva
+5;0.0;Marcos Silva
+6;0.0;Joana Soares
+7;0.0;Juarez Cardoso
+8;0.0;Maria Antonia dos Santos
