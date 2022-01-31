@@ -23,6 +23,7 @@ public class ContaInvestimento extends Conta implements Rendimentos {
         super.setCpf(cpf);
         super.setRendaMensal(rendaMensal);
         this.setSaldoTotal();
+        super.setTipo("CI");
     }
 
     public double getSaldoTotal() {

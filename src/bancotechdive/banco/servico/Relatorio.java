@@ -28,7 +28,7 @@ public class Relatorio {
     }
 
     public static String listarContasSaldoNegativo(List<Conta> contas) {
-        String retorno = "Não há documentos.contas negativadas!";
+        String retorno = "Não há contas negativadas!";
         for (Conta conta : contas) {
             if (conta.getSaldo() < 0) {
                 retorno = "\n=====================================\n" +

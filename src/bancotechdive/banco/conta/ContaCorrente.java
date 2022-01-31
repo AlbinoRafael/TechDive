@@ -14,6 +14,7 @@ public class ContaCorrente extends Conta{
         super.setNome(nome);
         super.setCpf(cpf);
         super.setRendaMensal(rendaMensal);
+        super.setTipo("CC");
     }
 
     @Override

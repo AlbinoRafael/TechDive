@@ -5,10 +5,11 @@ import bancotechdive.banco.conta.ContaCorrente;
 import bancotechdive.banco.conta.ContaInvestimento;
 import bancotechdive.banco.conta.ContaPoupanca;
 import bancotechdive.banco.servico.Relatorio;
+import bancotechdive.banco.servico.Transacao;
 import bancotechdive.banco.utils.MostraListas;
 import bancotechdive.banco.utils.MsgPadrao;
 
-import java.text.ParseException;
+import java.io.*;
 import java.util.*;
 
 public class Banco {
@@ -22,6 +23,7 @@ public class Banco {
     static {
         adicionaAgencia(new Agencia("001", "Florianópolis"));
         adicionaAgencia(new Agencia("002", "São José"));
+        //carregaContas();
         adicionaConta(new ContaCorrente("Joao Pedro", "238472837284", 1500));
         adicionaConta(new ContaInvestimento("Maria José", "12312412", 1200));
         adicionaConta(new ContaCorrente("Antonio Souza", "6435453234", 4200));
@@ -30,13 +32,20 @@ public class Banco {
         adicionaConta(new ContaCorrente("Joana Soares", "12312412", 1800));
         adicionaConta(new ContaPoupanca("Juarez Cardoso", "6435453234", 3500));
         adicionaConta(new ContaInvestimento("Maria Antonia dos Santos", "5634563456234", 2900));
+
+        try {
+            verificaArquivos();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
-    public static void main(String[] args) throws InterruptedException, ParseException {
+    public static void main(String[] args) {
         programa();
     }
 
-    public static void programa() throws ParseException {
+    public static void programa() {
         Locale.setDefault(Locale.US);
         Scanner sc = new Scanner(System.in);
         int opcao = 0;
@@ -51,15 +60,18 @@ public class Banco {
                 case 2:
                     //atualiza os dados da conta
                     atualizaConta((Conta) MostraListas.mostraItens(contas));
+                    regravaInformacoes();
                     break;
                 case 3:
                     //faz transação do tipo Saque
                     Conta conta = (Conta) MostraListas.mostraItens(contas);
                     if (conta != null) {
-                        if(conta.getSaldo()>0) {
+                        if (conta.getSaldo() > 0) {
                             System.out.print("\nDigite o valor do saque: R$");
                             conta.saque(sc.nextDouble());
-                        }else{
+                            conta.gravaExtrato();
+                            regravaInformacoes();
+                        } else {
                             MsgPadrao.mensagem("Você não possui saldo para realizar esta operação");
                         }
                     } else {
@@ -73,6 +85,8 @@ public class Banco {
                         System.out.print("Digite o valor do depósito: R$");
                         double valorDeposito = sc.nextDouble();
                         conta.deposito(valorDeposito);
+                        conta.gravaExtrato();
+                        regravaInformacoes();
                     } else {
                         MsgPadrao.mensagem("Opção inválida!");
                     }
@@ -88,6 +102,8 @@ public class Banco {
                         Conta contaAlvo = (Conta) MostraListas.mostraItens(contas);
                         if (contaAlvo != null) {
                             conta.transferir(contaAlvo, valorTransferencia);
+                            conta.gravaExtrato();
+                            regravaInformacoes();
                         } else {
                             MsgPadrao.mensagem("Opção inválida!");
                         }
@@ -140,7 +156,7 @@ public class Banco {
                     MsgPadrao.mensagem(historico());
                     break;
                 case 9:
-                    //faz simulação de rendimentos para documentos.contas do tipo Poupança
+                    //faz simulação de rendimentos para contas do tipo Poupança
                     ContaPoupanca cp = (ContaPoupanca) MostraListas.contasTotal(MostraListas.contasPoupanca(contas));
 
                     if (cp instanceof ContaPoupanca) {
@@ -162,7 +178,7 @@ public class Banco {
                     }
                     break;
                 case 10:
-                    conta = (ContaInvestimento) MostraListas.contasTotal(MostraListas.contasInvestimento(contas));
+                    conta = MostraListas.contasTotal(MostraListas.contasInvestimento(contas));
                     if (conta instanceof ContaInvestimento) {
                         //entra nas opções de investimentos
                         System.out.print(menu(4));//opcoes de investimentos
@@ -183,9 +199,9 @@ public class Banco {
                                     simulaRendimentoAnual = 2;
                                     ci.simulaRendimentos(simulaInvestimento, 12, simulaRendimentoAnual);//taxa 2% ao ano
                                 }
-                                MsgPadrao.mensagem("\n========================================\n"+
-                                                          "--------Simulação de Rendimentos -------" +
-                                                        "\n========================================\n"+
+                                MsgPadrao.mensagem("\n========================================\n" +
+                                        "--------Simulação de Rendimentos -------" +
+                                        "\n========================================\n" +
                                         "\nValor: R$" + simulaInvestimento +
                                         "\nPeríodo(meses): " + 12 +
                                         "\nPorcentagem anual: " + simulaRendimentoAnual + "%" + "\nValor final: R$" +
@@ -204,9 +220,9 @@ public class Banco {
                                         rendimentoAnual = 2;
                                         ci.investir("Tesouro Direto", investimento, rendimentoAnual);//taxa 2% ao ano
                                     }
-                                    MsgPadrao.mensagem("\n========================================\n"+
-                                                              "-------------- Investimentos -----------" +
-                                                            "\n========================================\n"+
+                                    MsgPadrao.mensagem("\n========================================\n" +
+                                            "-------------- Investimentos -----------" +
+                                            "\n========================================\n" +
                                             "\nValor: R$" + investimento +
                                             "\nPeríodo(meses): " + 12 +
                                             "\nPorcentagem anual: " + rendimentoAnual + "%" + "\nValor final: R$" +
@@ -231,21 +247,21 @@ public class Banco {
                                 int op1 = sc.nextInt();
                                 switch (op1) {
                                     case 1:
-                                        MsgPadrao.mensagem("\n========================================\n"+
-                                                                  "-------- Lista de Contas Corrente ------" +
-                                                                "\n========================================\n\n"+
+                                        MsgPadrao.mensagem("\n========================================\n" +
+                                                "-------- Lista de Contas Corrente ------" +
+                                                "\n========================================\n\n" +
                                                 Relatorio.listarContas("ContaCorrente", contas));
                                         break;
                                     case 2:
-                                        MsgPadrao.mensagem("\n========================================\n"+
-                                                                  "------- Lista de Contas Poupança -------" +
-                                                                "\n========================================\n"+
+                                        MsgPadrao.mensagem("\n========================================\n" +
+                                                "------- Lista de Contas Poupança -------" +
+                                                "\n========================================\n" +
                                                 Relatorio.listarContas("ContaPoupanca", contas));
                                         break;
                                     case 3:
-                                        MsgPadrao.mensagem("\n========================================\n"+
-                                                                  "----- Lista de Contas Investimento -----" +
-                                                                "\n========================================\n"+
+                                        MsgPadrao.mensagem("\n========================================\n" +
+                                                "----- Lista de Contas Investimento -----" +
+                                                "\n========================================\n" +
                                                 Relatorio.listarContas("ContaInvestimento", contas));
                                         break;
                                     case 4:
@@ -289,17 +305,20 @@ public class Banco {
                 case 1:
                     ContaCorrente cc = new ContaCorrente();
                     setaValoresConta(cc);
+                    cc.setTipo("CC");
                     adicionaConta(cc);
                     break;
                 case 2:
                     ContaPoupanca cp = new ContaPoupanca();
                     setaValoresConta(cp);
-                    contas.add(cp);
+                    cp.setTipo("CP");
+                    adicionaConta(cp);
                     break;
                 case 3:
                     ContaInvestimento ci = new ContaInvestimento();
                     setaValoresConta(ci);
-                    contas.add(ci);
+                    ci.setTipo("CI");
+                    adicionaConta(ci);
                     break;
                 case 0:
                     break;
@@ -331,7 +350,7 @@ public class Banco {
         return isValido;
     }
 
-    public static void setaValoresConta(Conta conta){
+    public static void setaValoresConta(Conta conta) {
 
         Scanner sc = new Scanner(System.in);
         System.out.print("\nDigite seu CPF: ");
@@ -357,10 +376,23 @@ public class Banco {
             switch (opcao) {
                 case 1:
                     sc.nextLine();
+                    File file = new File("documentos/transacoes/" + conta.getNome() + ".txt");
                     System.out.print("Nome atual: " + conta.getNome() +
                             "\nDigite o novo nome: ");
                     String novoNome = sc.nextLine();
-                    conta.setNome(novoNome);
+                    for (Conta c : contas) {
+                        for (Transacao t : c.getTransacoes()) {
+                            if (t.getTipo().equals("Transferência")) {
+                                if(t.getConta().getNome().equals(conta.getNome())){
+                                    if (file.exists()) {
+                                        file.renameTo(new File("documentos/transacoes/" + novoNome + ".txt"));
+                                    }
+                                    t.getConta().setNome(novoNome);
+                                    c.gravaExtrato();
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 2:
                     System.out.println("Agência atual: " + conta.getAgencia() +
@@ -461,7 +493,7 @@ public class Banco {
                 menuDeOpcoes = "\n=======================================\n" +
                         "--------- Opções de Relatórios --------" +
                         "\n=======================================\n\n" +
-                        "1 - Listar documentos.contas\n" +
+                        "1 - Listar contas\n" +
                         "2 - Valor total investido\n" +
                         "3 - Todas transações(cliente único)\n\n" +
                         "0 - Sair\n\n" +
@@ -469,13 +501,13 @@ public class Banco {
                 break;
             case 7:
                 menuDeOpcoes = "\n=======================================\n" +
-                        "----------- Listar documentos.contas -------------" +
+                        "----------- Listar contas -------------" +
                         "\n=======================================\n" +
-                        "1 - documentos.contas corrente\n" +
-                        "2 - documentos.contas poupança\n" +
-                        "3 - documentos.contas investimento\n\n" +
-                        "4 - Listar documentos.contas com saldo negativo\n" +
-                        "5 - Listar todas as documentos.contas\n\n" +
+                        "1 - contas corrente\n" +
+                        "2 - contas poupança\n" +
+                        "3 - contas investimento\n\n" +
+                        "4 - Listar contas com saldo negativo\n" +
+                        "5 - Listar todas as contas\n\n" +
                         "0 - Sair\n\n" +
                         "Selecione uma opção(apenas numeros): ";
                 break;
@@ -484,12 +516,81 @@ public class Banco {
         }
         return menuDeOpcoes;
     }
-    private static void adicionaConta(Conta conta){
-        contas.add(conta);
+
+    private static void adicionaConta(Conta conta) {
         conta.gravaConta();
+        contas.add(conta);
     }
-    private static void adicionaAgencia(Agencia agencia){
-        agencias.add(agencia);
+
+    private static void adicionaAgencia(Agencia agencia) {
         agencia.gravaAgencia();
     }
+
+    public static void carregaContas() {
+        List<String> lista = new ArrayList<>();
+        try {
+            Scanner sc = new Scanner(new File("documentos/contas/contas.txt"));
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+                lista.add(linha);
+            }
+            for (String s : lista) {
+                String[] dados = s.split(";");
+                String tipo = dados[0];
+                int id = Integer.parseInt(dados[1]);
+                double saldo = Double.parseDouble(dados[2]);
+                String nome = dados[3];
+                String cpf = dados[4];
+                double renda = Double.parseDouble(dados[5]);
+                if (tipo.equals("CC")) {
+                    Conta conta = new ContaCorrente(nome, cpf, renda);
+                    conta.setIdentificador(id);
+                    conta.setSaldo(saldo);
+                    conta.leExtrato();
+                    contas.add(conta);
+                } else if (tipo.equals("CP")) {
+                    Conta conta = new ContaPoupanca(nome, cpf, renda);
+                    conta.setIdentificador(id);
+                    conta.setSaldo(saldo);
+                    conta.leExtrato();
+                    contas.add(conta);
+                } else if (tipo.equals("CI")) {
+                    Conta conta = new ContaInvestimento(nome, cpf, renda);
+                    conta.setIdentificador(id);
+                    conta.setSaldo(saldo);
+                    conta.leExtrato();
+                    contas.add(conta);
+                }
+
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void regravaInformacoes() {
+        try (FileWriter fw = new FileWriter("documentos/contas/contas.txt", false);
+             PrintWriter pw = new PrintWriter(fw)) {
+            for (Conta c : contas) {
+                String dadosConta = String.format(Locale.US, "%s;%05d;%.2f;%s;%s;%.2f", c.getTipo(), c.getIdentificador(), c.getSaldo(), c.getNome(), c.getCpf(), c.getRendaMensal());
+                pw.println(dadosConta);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void verificaArquivos() throws IOException {
+        for (Conta conta : contas) {
+            File file = new File("documentos/transacoes");
+            File[] arquivos = file.listFiles();
+            for (File f : arquivos) {
+                if (!f.getName().equals(conta.getNome())) {
+                    f.delete();
+                }
+            }
+        }
+    }
+
 }

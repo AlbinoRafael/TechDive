@@ -1,8 +1,8 @@
-1;0.0;Joao Pedro
-2;0.0;Maria José
-3;0.0;Antonio Souza
-4;0.0;Ana Maria da Silva
-5;0.0;Marcos Silva
-6;0.0;Joana Soares
-7;0.0;Juarez Cardoso
-8;0.0;Maria Antonia dos Santos
+CC;00001;4000.00;Joao Pedro de Assis;238472837284;1500.00
+CI;00002;1000.00;Maria José;12312412;1200.00
+CC;00003;0.00;Antonio Souza;6435453234;4200.00
+CP;00004;0.00;Ana Maria da Silva;5634563456234;2400.00
+CC;00005;0.00;Marcos Silva;238472837284;1300.00
+CC;00006;0.00;Joana Soares;12312412;1800.00
+CP;00007;0.00;Juarez Cardoso;6435453234;3500.00
+CI;00008;0.00;Maria Antonia dos Santos;5634563456234;2900.00

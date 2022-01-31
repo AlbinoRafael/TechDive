@@ -13,6 +13,7 @@ public class ContaPoupanca extends Conta implements Rendimentos {
         super.setNome(nome);
         super.setCpf(cpf);
         super.setRendaMensal(rendaMensal);
+        super.setTipo("CP");
     }
 
     public double simulaRendimentos(double valorSimulacao, int meses, double rentabilidadeAnual) {
