@@ -21,24 +21,24 @@ public class Banco {
     private static List<Conta> contas = new ArrayList<>();
 
     static {
-        adicionaAgencia(new Agencia("001", "Florianópolis"));
-        adicionaAgencia(new Agencia("002", "São José"));
-        //carregaContas();
-        adicionaConta(new ContaCorrente("Joao Pedro", "238472837284", 1500));
+        //adicionaAgencia(new Agencia("001", "Florianópolis"));
+        //adicionaAgencia(new Agencia("002", "São José"));
+        carregaContas();
+        carregaAgencias();
+        /*adicionaConta(new ContaCorrente("Joao Pedro", "238472837284", 1500));
         adicionaConta(new ContaInvestimento("Maria José", "12312412", 1200));
         adicionaConta(new ContaCorrente("Antonio Souza", "6435453234", 4200));
         adicionaConta(new ContaPoupanca("Ana Maria da Silva", "5634563456234", 2400));
         adicionaConta(new ContaCorrente("Marcos Silva", "238472837284", 1300));
         adicionaConta(new ContaCorrente("Joana Soares", "12312412", 1800));
         adicionaConta(new ContaPoupanca("Juarez Cardoso", "6435453234", 3500));
-        adicionaConta(new ContaInvestimento("Maria Antonia dos Santos", "5634563456234", 2900));
+        adicionaConta(new ContaInvestimento("Maria Antonia dos Santos", "5634563456234", 2900));*/
 
         try {
             verificaArquivos();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {
@@ -68,8 +68,10 @@ public class Banco {
                     if (conta != null) {
                         if (conta.getSaldo() > 0) {
                             System.out.print("\nDigite o valor do saque: R$");
-                            conta.saque(sc.nextDouble());
+                            double valor = sc.nextDouble();
+                            conta.saque(valor);
                             conta.gravaExtrato();
+                            gravaHistorico("Saque realizado! Valor: "+valor+" Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                             regravaInformacoes();
                         } else {
                             MsgPadrao.mensagem("Você não possui saldo para realizar esta operação");
@@ -86,6 +88,7 @@ public class Banco {
                         double valorDeposito = sc.nextDouble();
                         conta.deposito(valorDeposito);
                         conta.gravaExtrato();
+                        gravaHistorico("Depósito realizado! Valor: "+valorDeposito +" Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                         regravaInformacoes();
                     } else {
                         MsgPadrao.mensagem("Opção inválida!");
@@ -103,6 +106,7 @@ public class Banco {
                         if (contaAlvo != null) {
                             conta.transferir(contaAlvo, valorTransferencia);
                             conta.gravaExtrato();
+                            gravaHistorico("Transferência realizada! Valor: "+valorTransferencia+" Conta origem: "+conta.getNome()+", cpf origem: "+conta.getCpf()+", Conta destino: "+contaAlvo.getNome()+", cpf destino: "+contaAlvo.getCpf()+" - "+conta.mostraData());
                             regravaInformacoes();
                         } else {
                             MsgPadrao.mensagem("Opção inválida!");
@@ -119,9 +123,11 @@ public class Banco {
                             ContaCorrente cc = (ContaCorrente) conta;
                             if (cc.getSaldo() >= 0) {
                                 MsgPadrao.mensagem("-------SALDO------\n\nNome: " + conta.getNome() + "\nSaldo disponivel: R$ " + conta.getSaldo());
+                                gravaHistorico("Consulta de saldo! Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                             } else {
                                 MsgPadrao.mensagem("-------SALDO------\n\nNome: " + conta.getNome() + "\nSaldo disponivel: R$ " +
                                         conta.getSaldo() + "\nData limite: " + cc.periodoFicarNegativado());
+                                gravaHistorico("Consulta de saldo! Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                             }
                         } else if (conta instanceof ContaInvestimento) {
                             ContaInvestimento ci = (ContaInvestimento) conta;
@@ -130,9 +136,11 @@ public class Banco {
                                         "\nSaldo disponivel: R$ " + ci.getSaldo() +
                                         "\nTotal investido: RS " + ci.getTotalInvestido() +
                                         "\nSaldo total: R$ " + ci.getSaldoTotal());
+                                gravaHistorico("Consulta de saldo! Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                             }
                         } else {
                             MsgPadrao.mensagem("-------SALDO------\n\nNome: " + conta.getNome() + "\nSaldo disponivel: R$ " + conta.getSaldo());
+                            gravaHistorico("Consulta de saldo! Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                         }
                     } else {
                         MsgPadrao.mensagem("Opção inválida!");
@@ -144,8 +152,10 @@ public class Banco {
                     if (conta != null) {
                         if (conta.getExtrato() != null) {
                             MsgPadrao.mensagem(conta.extrato());
+                            gravaHistorico("Consulta de extrato! Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                         } else {
                             MsgPadrao.mensagem("Você ainda não realizou nenhuma operação!");
+                            gravaHistorico("Consulta de extrato! Nome: "+conta.getNome()+", cpf: "+conta.getCpf()+" - "+conta.mostraData());
                         }
                     } else {
                         MsgPadrao.mensagem("Opção inválida!");
@@ -153,7 +163,7 @@ public class Banco {
                     break;
                 case 8:
                     //mostra o histórico de todas as transações
-                    MsgPadrao.mensagem(historico());
+                    MsgPadrao.mensagem(mostraHistorico());
                     break;
                 case 9:
                     //faz simulação de rendimentos para contas do tipo Poupança
@@ -170,8 +180,10 @@ public class Banco {
                                     "\nPeríodo(meses): " + meses +
                                     "\nPorcentagem anual: " + rendimentoAnual + "%" + "\nValor final: R$" +
                                     String.format("%.2f", cp.simulaRendimentos(cp.getSaldo(), meses, rendimentoAnual)) + "\n");
+                            gravaHistorico("Simulação de rendimentos(Conta Poupança)! Nome: "+cp.getNome()+", cpf: "+cp.getCpf()+" - "+cp.mostraData());
                         } else {
                             MsgPadrao.mensagem("Você não possui fundos para fazer a simulação!");
+                            gravaHistorico("Simulação de rendimentos(Conta Poupança)! Nome: "+cp.getNome()+", cpf: "+cp.getCpf()+" - "+cp.mostraData());
                         }
                     } else {
                         MsgPadrao.mensagem("Sua conta não possui suporte à este serviço!");
@@ -206,6 +218,7 @@ public class Banco {
                                         "\nPeríodo(meses): " + 12 +
                                         "\nPorcentagem anual: " + simulaRendimentoAnual + "%" + "\nValor final: R$" +
                                         String.format("%.2f", ci.simulaRendimentos(simulaInvestimento, 12, simulaRendimentoAnual)) + "\n");
+                                gravaHistorico("Simulação de rendimentos(Conta Investimento)! Nome: "+ci.getNome()+", cpf: "+ci.getCpf()+" - "+ci.mostraData());
                                 break;
                             case 2:
                                 ci = (ContaInvestimento) conta;
@@ -227,6 +240,7 @@ public class Banco {
                                             "\nPeríodo(meses): " + 12 +
                                             "\nPorcentagem anual: " + rendimentoAnual + "%" + "\nValor final: R$" +
                                             String.format("%.2f", ci.getTotalInvestido()) + "\n");
+                                    gravaHistorico("Investimento(Conta Investimento)!Valor: "+investimento+" Nome: "+ci.getNome()+", cpf: "+ci.getCpf()+" - "+ci.mostraData());
                                 } else {
                                     MsgPadrao.mensagem("Você não possui fundos para realizar esta operação!");
                                 }
@@ -383,26 +397,75 @@ public class Banco {
                     for (Conta c : contas) {
                         for (Transacao t : c.getTransacoes()) {
                             if (t.getTipo().equals("Transferência")) {
-                                if(t.getConta().getNome().equals(conta.getNome())){
+                                if (t.getConta().getNome().equals(conta.getNome())) {
                                     if (file.exists()) {
                                         file.renameTo(new File("documentos/transacoes/" + novoNome + ".txt"));
                                     }
+                                    if (!conta.getNome().equals(novoNome)) {
+                                        gravaHistorico("Nome atualizado! De: " + conta.getNome() + ", Para: " + novoNome + " - " + c.mostraData());
+                                        t.getConta().setNome(novoNome);
+                                        c.regravaTransacoes();
+                                        try {
+                                            Conta.verificaArquivosExtrato();
+                                            Conta.regravaExtrato();
+                                        }catch(Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        c.regravaTransacoes();
+                                        try {
+                                            Conta.verificaArquivosExtrato();
+                                            Conta.regravaExtrato();
+                                        }catch(Exception e){
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                                if (t.getContaAlvo().getNome().equals(c.getNome())) {
+                                    if (file.exists()) {
+                                        file.renameTo(new File("documentos/transacoes/" + novoNome + ".txt"));
+                                    }
+                                    gravaHistorico("Nome atualizado! De: " + conta.getNome() + ", Para: " + novoNome + " - " + c.mostraData());
                                     t.getConta().setNome(novoNome);
-                                    c.gravaExtrato();
+                                    c.regravaTransacoes();
+                                    try {
+                                        Conta.verificaArquivosExtrato();
+                                        Conta.regravaExtrato();
+                                    }catch(Exception e){
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if(t.getContaAlvo().getNome().equals(conta.getNome())){
+                                    if (file.exists()) {
+                                        file.renameTo(new File("documentos/transacoes/" + novoNome + ".txt"));
+                                    }
+                                    gravaHistorico("Nome atualizado! De: " + conta.getNome() + ", Para: " + novoNome + " - " + c.mostraData());
+                                    t.getConta().setNome(novoNome);
+                                    c.regravaTransacoes();
+                                    try {
+                                        Conta.verificaArquivosExtrato();
+                                        Conta.regravaExtrato();
+                                    }catch(Exception e){
+                                        e.printStackTrace();
+                                    }
                                 }
                             }
                         }
                     }
                     break;
                 case 2:
-                    System.out.println("Agência atual: " + conta.getAgencia() +
+                    String agenciaAntes = conta.getAgencia().getNumero() + " - " + conta.getAgencia().getCidade();
+                    System.out.println("Agência atual: " + agenciaAntes +
                             "\nEscolha a nova agência: ");
                     conta.setAgencia((Agencia) MostraListas.mostraItens(agencias));
+                    gravaHistorico("Agência atualizada! De: " + agenciaAntes + ", Para: " + conta.getAgencia().getNumero() + " - " + conta.getAgencia().getCidade());
                     break;
                 case 3:
-                    System.out.print("Renda mensal atual: R$ " + conta.getRendaMensal() +
+                    double rendaAntes = conta.getRendaMensal();
+                    System.out.print("Renda mensal atual: R$ " + rendaAntes +
                             "\nDigite o novo valor: R$");
                     conta.setRendaMensal(sc.nextDouble());
+                    gravaHistorico("Renda atualizada! De: " + rendaAntes + ", Para: " + conta.getRendaMensal());
                     break;
                 case 0:
                     break;
@@ -414,19 +477,8 @@ public class Banco {
         }
     }
 
-    public static String historico() {
-        String historico = "\n--------Histórico de Transações--------\n";
-        for (int i = 0; i < contas.size(); i++) {
-            if (!contas.get(i).getTransacoes().isEmpty()) {
-                for (int j = 0; j < contas.get(i).getTransacoes().size(); j++) {
-                    historico += contas.get(i).getTransacoes().get(j).toString();
-                }
-            }
-        }
-        if (historico.length() == 41) {
-            historico = "Sem histórico de transações!";
-        }
-        return historico;
+    public static List<Conta> listaDeContas() {
+        return Collections.unmodifiableList(contas);
     }
 
     public static String menu(int opMenu) {
@@ -520,10 +572,41 @@ public class Banco {
     private static void adicionaConta(Conta conta) {
         conta.gravaConta();
         contas.add(conta);
+        String tipoConta = "";
+        if (conta instanceof ContaCorrente) {
+            tipoConta = "Corrente";
+        } else if (conta instanceof ContaPoupanca) {
+            tipoConta = "Poupança";
+        } else if (conta instanceof ContaInvestimento) {
+            tipoConta = "Investimento";
+        }
+        gravaHistorico("Conta " + tipoConta + " criada! Nome: " + conta.getNome() + ", cpf: " + conta.getCpf() + " - " + conta.mostraData() + "\n");
     }
-
-    private static void adicionaAgencia(Agencia agencia) {
+    //este metodo foi usado apenas para testes
+    /*private static void adicionaAgencia(Agencia agencia) {
         agencia.gravaAgencia();
+        agencias.add(agencia);
+    }*/
+
+    public static void carregaAgencias(){
+        List<String> lista = new ArrayList<>();
+        try {
+            Scanner sc = new Scanner(new File("documentos/agencias/agencias.txt"));
+            while (sc.hasNextLine()) {
+                String linha = sc.nextLine();
+                lista.add(linha);
+            }
+            for (String s : lista) {
+                String[] dados = s.split(";");
+                String numeroAgencia = dados[0];
+                String cidadeAgencia = dados[1];
+                Agencia agencia = new Agencia(numeroAgencia,cidadeAgencia);
+                agencias.add(agencia);
+            }
+            sc.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void carregaContas() {
@@ -542,24 +625,30 @@ public class Banco {
                 String nome = dados[3];
                 String cpf = dados[4];
                 double renda = Double.parseDouble(dados[5]);
+                String numeroAgencia = dados[6];
+                String cidadeAgencia = dados[7];
+                Agencia agencia = new Agencia(numeroAgencia,cidadeAgencia);
                 if (tipo.equals("CC")) {
                     Conta conta = new ContaCorrente(nome, cpf, renda);
                     conta.setIdentificador(id);
                     conta.setSaldo(saldo);
-                    conta.leExtrato();
+                    conta.setAgencia(agencia);
                     contas.add(conta);
+                    conta.carregaTransacoes();
                 } else if (tipo.equals("CP")) {
                     Conta conta = new ContaPoupanca(nome, cpf, renda);
                     conta.setIdentificador(id);
                     conta.setSaldo(saldo);
-                    conta.leExtrato();
+                    conta.setAgencia(agencia);
                     contas.add(conta);
+                    conta.carregaTransacoes();
                 } else if (tipo.equals("CI")) {
                     Conta conta = new ContaInvestimento(nome, cpf, renda);
                     conta.setIdentificador(id);
                     conta.setSaldo(saldo);
-                    conta.leExtrato();
+                    conta.setAgencia(agencia);
                     contas.add(conta);
+                    conta.carregaTransacoes();
                 }
 
             }
@@ -573,7 +662,7 @@ public class Banco {
         try (FileWriter fw = new FileWriter("documentos/contas/contas.txt", false);
              PrintWriter pw = new PrintWriter(fw)) {
             for (Conta c : contas) {
-                String dadosConta = String.format(Locale.US, "%s;%05d;%.2f;%s;%s;%.2f", c.getTipo(), c.getIdentificador(), c.getSaldo(), c.getNome(), c.getCpf(), c.getRendaMensal());
+                String dadosConta = String.format(Locale.US, "%s;%05d;%.2f;%s;%s;%.2f;%s;%s", c.getTipo(), c.getIdentificador(), c.getSaldo(), c.getNome(), c.getCpf(), c.getRendaMensal(),c.getAgencia().getNumero(),c.getAgencia().getCidade());
                 pw.println(dadosConta);
             }
         } catch (Exception e) {
@@ -593,4 +682,28 @@ public class Banco {
         }
     }
 
+    public static void gravaHistorico(String dados) {
+        try (FileWriter fw = new FileWriter("documentos/historico/historico.txt", true);
+             PrintWriter pw = new PrintWriter(fw)) {
+            String gravacao = dados;
+            pw.println(gravacao);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String mostraHistorico(){
+        try {
+            Scanner sc = new Scanner(new File("documentos/historico/historico.txt"));
+            String historico = "\n--------Histórico--------\n\n";
+            while (sc.hasNextLine()) {
+                historico+=sc.nextLine();
+            }
+            sc.close();
+            return historico;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "Sem dados no Histórico";
+    }
 }

@@ -1,0 +1,25 @@
+
+----------- SAQUE -----------
+
+Id: 1 - Agencia: 001 - Florianópolis
+Nome: Maria Antonieta
+CPF: 238472837284
+Valor: R$ 500.0
+Data: 01/02/2022 15:12:11
+
+
+
+----------- TRANSFERÊNCIA -----------
+
+Id: 1 - Agencia: 001 - Florianópolis
+Conta origem: Maria Antonieta
+CPF: 238472837284
+
+Id: 2 - Agencia: 001 - Florianópolis
+Conta destino: Maria Joao Barcelos
+CPF: 12312412
+
+Valor: R$ 4000.0
+Data: 01/02/2022 15:13:08
+
+

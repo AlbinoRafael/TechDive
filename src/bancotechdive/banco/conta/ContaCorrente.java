@@ -26,6 +26,7 @@ public class ContaCorrente extends Conta{
             this.setSaldo(this.getSaldo() - transacao.getValor());
             this.setExtrato(transacao.toString());
             this.getTransacoes().add(transacao);
+            gravaTransacao(transacao);
         }
     }
 

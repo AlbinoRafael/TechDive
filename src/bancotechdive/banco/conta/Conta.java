@@ -1,6 +1,7 @@
 package bancotechdive.banco.conta;
 
 import bancotechdive.banco.Agencia;
+import bancotechdive.banco.Banco;
 import bancotechdive.banco.servico.Transacao;
 import bancotechdive.banco.utils.MsgPadrao;
 
@@ -8,6 +9,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -113,18 +116,21 @@ public abstract class Conta {
     }
 
     public String extrato() {
-        String extrato = "\n----------- Extrato -----------\n";
+        String extrato = "\n----------- Extrato -----------\n\n";
         extrato += this.getExtrato();
         return extrato;
     }
 
     public void saque(double valorSaque) {
-        Transacao transacao = new Transacao(this, valorSaque);
-        transacao.setTipo("Saque");
-        transacao.setValor(valorSaque);
-        this.setSaldo(this.getSaldo() - transacao.getValor());
-        this.setExtrato(transacao.toString());
-        this.getTransacoes().add(transacao);
+        if (this.getSaldo() > 0) {
+            Transacao transacao = new Transacao(this, valorSaque);
+            transacao.setTipo("Saque");
+            transacao.setValor(valorSaque);
+            this.setSaldo(this.getSaldo() - transacao.getValor());
+            this.setExtrato(transacao.toString());
+            this.getTransacoes().add(transacao);
+            gravaTransacao(transacao);
+        }
     }
 
     public void deposito(double valorDeposito) {
@@ -135,7 +141,7 @@ public abstract class Conta {
             this.setSaldo(this.getSaldo() + transacao.getValor());
             this.setExtrato(transacao.toString());
             this.getTransacoes().add(transacao);
-            this.gravaExtrato();
+            gravaTransacao(transacao);
         } else {
             MsgPadrao.mensagem("Insira um valor válido!");
         }
@@ -154,7 +160,8 @@ public abstract class Conta {
                 contaAlvo.setExtrato(transacao.toString());
                 this.getTransacoes().add(transacao);
                 contaAlvo.getTransacoes().add(transacao);
-                contaAlvo.gravaExtrato();
+                gravaTransacao(transacao);
+                contaAlvo.gravaTransacao(transacao);
             } else {
                 MsgPadrao.mensagem("A conta de origem e a de destino não podem ser a mesma!");
             }
@@ -170,7 +177,7 @@ public abstract class Conta {
     public void gravaConta() {
         try (FileWriter fw = new FileWriter("documentos/contas/contas.txt", true);
              PrintWriter pw = new PrintWriter(fw)) {
-            String dadosConta = String.format(Locale.US, "%s;%05d;%.2f;%s;%s;%.2f", this.getTipo(), this.getIdentificador(), this.getSaldo(), this.getNome(), this.getCpf(), this.getRendaMensal());
+            String dadosConta = String.format(Locale.US, "%s;%05d;%.2f;%s;%s;%.2f;%s;%s", this.getTipo(), this.getIdentificador(), this.getSaldo(), this.getNome(), this.getCpf(), this.getRendaMensal(), this.getAgencia().getNumero(), this.getAgencia().getCidade());
             Path path = Paths.get("documentos/contas/contas.txt");
             if (Files.size(path) == 0) {
                 pw.println(dadosConta);
@@ -210,30 +217,118 @@ public abstract class Conta {
         return false;
     }
 
-    public void gravaExtrato(){
-        try (FileWriter fw = new FileWriter("documentos/transacoes/"+this.getNome()+".txt", false);
+    public void gravaTransacao(Transacao t) {
+        try (FileWriter fw = new FileWriter("documentos/transacoes/" + this.getNome() + ".txt", true);
              PrintWriter pw = new PrintWriter(fw)) {
-            String extrato = "";
-            for(Transacao t: this.transacoes) {
-                extrato+=t;
+            String dadosTransacao = "";
+            if (t.getTipo().equals("Saque") || t.getTipo().equals("Depósito") || t.getTipo().equals("Investimento")) {
+                dadosTransacao = String.format(Locale.US, "%s;%s;%.2f;%s;%s", t.getTipo(), t.getConta().getNome(), t.getValor(), t.getData(), null);
+            } else if (t.getTipo().equals("Transferência")) {
+                dadosTransacao = String.format(Locale.US, "%s;%s;%.2f;%s;%s", t.getTipo(), t.getConta().getNome(), t.getValor(), t.getData(), t.getContaAlvo().getNome());
             }
-            pw.println(extrato);
+            pw.println(dadosTransacao);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void leExtrato(){
-        try{
-            Scanner sc = new Scanner(new File("documentos/transacoes/"+this.getNome()+".txt"));
-            String extrato = null;
-            while (sc.hasNextLine()) {
-                String linha = sc.nextLine();
-                extrato+=linha;
+    public void regravaTransacoes() {
+        try (FileWriter fw = new FileWriter("documentos/transacoes/" + this.getNome() + ".txt", false);
+             PrintWriter pw = new PrintWriter(fw)) {
+            if (!transacoes.isEmpty()) {
+                for (Transacao t : transacoes) {
+                    String dadosTransacao = "";
+                    if (t.getTipo().equals("Saque") || t.getTipo().equals("Depósito") || t.getTipo().equals("Investimento")) {
+                        dadosTransacao = String.format(Locale.US, "%s;%s;%.2f;%s;%s", t.getTipo(), t.getConta().getNome(), t.getValor(), t.getData(), null);
+                    } else if (t.getTipo().equals("Transferência")) {
+                        dadosTransacao = String.format(Locale.US, "%s;%s;%.2f;%s;%s", t.getTipo(), t.getConta().getNome(), t.getValor(), t.getData(), t.getContaAlvo().getNome());
+                    }
+                    pw.println(dadosTransacao);
+                }
             }
-            this.setExtrato(extrato);
-        }catch(Exception e){
-            System.out.println("A conta não possui transacoes!");;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    public void carregaTransacoes() {
+        List<String> lista = new ArrayList<>();
+        try {
+            File file = new File("documentos/transacoes/" + this.getNome() + ".txt");
+            if (file.exists()) {
+                Scanner sc = new Scanner(file);
+                while (sc.hasNextLine()) {
+                    String linha = sc.nextLine();
+                    lista.add(linha);
+                }
+                for (String s : lista) {
+                    String[] dados = s.split(";");
+                    String tipo = dados[0];
+                    String contaAtual = dados[1];
+                    double valor = Double.parseDouble(dados[2]);
+                    String data = dados[3];
+                    String contaAlvo = dados[4];
+                    if (tipo.equals("Saque") || tipo.equals("Depósito") || tipo.equals("Investimento")) {
+                        if (this.getNome().equals(contaAtual)) {
+                            Transacao t = new Transacao(this, valor);
+                            t.setData(data);
+                            this.getTransacoes().add(t);
+                        }
+                    } else if (tipo.equals("Transferência")) {
+                        for (Conta c : Banco.listaDeContas()) {
+                            if (this.getNome().equals(contaAtual)) {
+                                if (c.getNome().equals(contaAlvo)) {
+                                    Transacao t = new Transacao(this, c, valor);
+                                    t.setData(data);
+                                    this.getTransacoes().add(t);
+                                }
+                            }
+                        }
+                    }
+                }
+                sc.close();
+            }
+        } catch (
+                FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void gravaExtrato() {
+        try (FileWriter fw = new FileWriter("documentos/extratos/" + this.getNome() + ".txt", true);
+             PrintWriter pw = new PrintWriter(fw)) {
+            String dadosExtrato = "";
+            for (Transacao t : transacoes) {
+                dadosExtrato = t.toString();
+            }
+            pw.println(dadosExtrato);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void verificaArquivosExtrato() throws IOException {
+        for (Conta conta : Banco.listaDeContas()) {
+            if (conta.getTransacoes().size() > 0) {
+                File file = new File("documentos/extratos/");
+                File[] arquivos = file.listFiles();
+                for (File f : arquivos) {
+                    if (!f.getName().equals(conta.getNome())) {
+                        f.delete();
+                    }
+                }
+            }
+        }
+    }
+    public static void regravaExtrato(){
+
+    }
+
+    public String mostraData() {
+        LocalDateTime ldt = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        String data = ldt.format(dtf);
+        return data;
     }
 }

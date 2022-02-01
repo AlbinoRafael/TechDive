@@ -35,7 +35,12 @@ public class Transacao {
     public double getValor() {
         return valor;
     }
-
+    public String getData(){
+        return this.data;
+    }
+    public void setData(String data){
+        this.data = data;
+    }
     public void setValor(double valor) {
         this.valor = valor;
     }
@@ -89,7 +94,7 @@ public class Transacao {
                     "Data: " + this.mostraData() + "\n" +
                     "Data limite: " + cc.limiteChequeEspecial() + "\n\n";
 
-        } else if (this.getTipo().equalsIgnoreCase("investimento") && this.getConta() instanceof ContaInvestimento) {
+        } else if (this.getTipo().equalsIgnoreCase("Investimento") && this.getConta() instanceof ContaInvestimento) {
             ContaInvestimento ci = (ContaInvestimento) conta;
             retorno = "\n----------- " + this.getTipo().toUpperCase() + " -----------\n\n" +
                     "Tipo do Investimento: " + ci.getInvestimentos().get(ci.getInvestimentos().size() - 1).getTipo() + "\n" +
