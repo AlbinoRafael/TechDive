@@ -57,8 +57,9 @@ public class Menu {
                 Reserva reserva = new Reserva(Listar.escolheHospede(Hotel.getHospedes()), Listar.escolheQuarto(Hotel.getQuartos()));
                 System.out.print("Digite a data para reserva(ex: 01-01-2022): ");
                 String dataReserva = sc.nextLine();
-                reserva.agendarReserva(dataReserva);
-                Hotel.registraReserva(reserva);
+                System.out.print("Quantos dias pretende reservar?: ");
+                int diasReserva = sc.nextInt();
+                reserva.agendarReserva(dataReserva, diasReserva);
                 break;
             case 2:
                 Reserva reservaParaCancelar = Listar.escolheReserva(Hotel.getReservas());

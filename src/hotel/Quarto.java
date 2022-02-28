@@ -1,40 +1,22 @@
 package hotel;
 
+import hotel.agenda.Reserva;
+
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Quarto {
 
     private int numeroQuarto;
-    private boolean estaDisponivel;
     private int valorDiaria;
-    private LocalDate dataReserva;
     private EnumTipoQuarto tipoQuarto;
 
-    public Quarto(int numeroQuarto, boolean estaDisponivel, EnumTipoQuarto tipoQuarto) {
+    public Quarto(int numeroQuarto, EnumTipoQuarto tipoQuarto) {
         this.numeroQuarto = numeroQuarto;
-        this.estaDisponivel = estaDisponivel;
         this.tipoQuarto = tipoQuarto;
     }
 
     public int getNumeroQuarto() {
         return numeroQuarto;
-    }
-
-    private LocalDate getDataReserva(){
-        return this.dataReserva;
-    }
-
-    public void setDataReserva(LocalDate dataReserva){
-        this.dataReserva = dataReserva;
-    }
-
-    public boolean isEstaDisponivel() {
-        return estaDisponivel;
-    }
-
-    public void setEstaDisponivel(boolean estaDisponivel) {
-        this.estaDisponivel = estaDisponivel;
     }
 
     public int getValorDiaria() {
@@ -53,16 +35,22 @@ public class Quarto {
         this.tipoQuarto = tipoQuarto;
     }
 
-    public String retornaDataReserva(){
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dataReservada = dtf.format(this.getDataReserva());
-        return dataReservada;
+    public boolean estaDisponivel(LocalDate dataInicio, int diasReserva) {
+        LocalDate dataFim = dataInicio.plusDays(diasReserva);
+        if (!Hotel.getReservas().isEmpty()) {
+            for (Reserva r : Hotel.getReservas()) {
+                if ((dataInicio.isBefore(r.getDataAgendamento()) && dataFim.isBefore(r.getDataAgendamento()))
+                        || dataInicio.isAfter(r.getDataAgendamento()) && dataFim.isAfter(r.getDataFimAgendamento())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override
     public String toString() {
         return "numero do quarto: " + numeroQuarto +
-                ", esta disponivel: " + estaDisponivel +
                 ", valor da diaria: " + valorDiaria +
                 ", tipo do quarto: " + tipoQuarto.getTipo();
     }

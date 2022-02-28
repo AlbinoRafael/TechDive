@@ -1,7 +1,5 @@
 package hotel;
 
-import java.util.Objects;
-
 public class Hospede implements Comparable<Hospede>{
 
     private String nome;
@@ -11,11 +9,12 @@ public class Hospede implements Comparable<Hospede>{
     private EnumTipoQuarto tipoQuarto;
 
 
-    public Hospede(String nome, String sobrenome, String documentoIdentificacao, String dataNascimento) {
+    public Hospede(String nome, String sobrenome, String documentoIdentificacao, String dataNascimento, EnumTipoQuarto tipoQuarto) {
         this.nome = nome;
         this.sobrenome = sobrenome;
         this.documentoIdentificacao = documentoIdentificacao;
         this.dataNascimento = dataNascimento;
+        this.tipoQuarto = tipoQuarto;
     }
 
     public String getNome() {
@@ -48,6 +47,10 @@ public class Hospede implements Comparable<Hospede>{
 
     public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public EnumTipoQuarto getTipoQuarto(){
+        return this.tipoQuarto;
     }
 
     @Override
