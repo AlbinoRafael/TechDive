@@ -15,23 +15,25 @@ public class Program {
 
 	public static void main(String[] args) throws SQLException {
 		FactoryConnection factoryConnection = new FactoryConnection();
-		Connection conn = factoryConnection.openConnection();
-		System.out.println("Abriu conexão!");
-		try {
-			conn.setAutoCommit(false);
-			
-			SaleItemDAO saleItemDao = new SaleItemDAO(conn);
-			saleItemDao.list();
+		try (Connection conn = factoryConnection.openConnection();) {
+			System.out.println("Abriu conexão!");
+			try {
+				conn.setAutoCommit(false);
 
-			factoryConnection.closeConnection(conn);
+				SaleItemDAO saleItemDao = new SaleItemDAO(conn);
+				saleItemDao.list();
+
+				factoryConnection.closeConnection(conn);
+			} catch (SQLException e) {
+				System.out.println("Erro ao se conectar ao banco de dados. Causado por: " + e.getMessage());
+				e.printStackTrace();
+				conn.rollback();
+			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao se conectar ao banco de dados. Causado por: " + e.getMessage());
-			e.printStackTrace();
-			conn.rollback();
+			System.out.println("Erro de autenticação: Senha incorreta!");
 		}
 	}
 
-	
 	public static void menu(Connection conn) throws SQLException {
 		boolean continua = false;
 		do {
