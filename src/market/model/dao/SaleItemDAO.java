@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import market.model.entities.SaleItem;
 
@@ -17,8 +16,8 @@ public class SaleItemDAO {
 	}
 
 	public void list() throws SQLException {
-		Statement statement = conn.createStatement();
-		statement.execute("select id_item_venda,id_produto,id_venda, quantidade, valor_un, subtotal from item_venda;");
+		PreparedStatement statement = conn.prepareStatement("select id_item_venda,id_produto,id_venda, quantidade, valor_un, subtotal from item_venda;");
+		statement.execute();
 
 		ResultSet resultSet = statement.getResultSet();
 		int count = 0;
