@@ -26,7 +26,8 @@ public class ClientDAO {
 			int id = resultSet.getInt("id_cliente");
 			String name = resultSet.getString("nome");
 			String cpf = resultSet.getString("cpf");
-			System.out.println("Cliente " + count + ": id={" + id + "}, name={" + name + "}, cpf={" + cpf + "}");
+//			System.out.println("Cliente" +count + ": id={" + id + "}, name={" + name + "}, cpf={" + cpf + "}");
+			System.out.printf("%-25s %16s %23s%n", count + " - "+name,id,cpf);
 		}
 	}
 
@@ -56,10 +57,10 @@ public class ClientDAO {
 			int updateCount = statement.getUpdateCount();
 
 			if (updateCount == 0) {
-				System.out.println("Cliente não encontrado no banco. Cliente não deletado.");
+				System.out.println("\nCliente não encontrado no banco. Cliente não deletado.");
 				return false;
 			} else {
-				System.out.println("Cliente deletado com sucesso!");
+				System.out.println("\nCliente deletado com sucesso!");
 				return true;
 			}
 
@@ -68,5 +69,22 @@ public class ClientDAO {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	public Client clientePorId(Connection conn,int id_cliente) throws SQLException {
+		PreparedStatement statement = conn.prepareStatement("select * from cliente where id_cliente = ?");
+		ResultSet resultSet = statement.getResultSet();
+		statement.setInt(1, id_cliente);
+		statement.execute();
+		resultSet = statement.executeQuery();
+		
+		if(resultSet.next()) {
+			int id = resultSet.getInt("id_cliente");
+			String name = resultSet.getString("nome");
+			String cpf = resultSet.getString("cpf");
+			Client client = new Client(name,cpf);
+			client.setId(id);
+			return client;
+		}
+		return null;
 	}
 }

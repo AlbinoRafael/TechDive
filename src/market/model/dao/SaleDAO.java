@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import market.model.entities.Client;
+import market.model.entities.Product;
 import market.model.entities.Sale;
 
 public class SaleDAO {
@@ -28,8 +30,9 @@ public class SaleDAO {
 			int idClient = resultSet.getInt("id_cliente");
 			double price = resultSet.getDouble("valor");
 			Date data = resultSet.getDate("data");
-			System.out.println("Sale " + count + ": id={" + id + "}, client={" + idClient + "}, price={" + price
-					+ "}, date={" + data + "}");
+//			System.out.println("Sale " + count + ": id={" + id + "}, client={" + idClient + "}, price={" + price
+//					+ "}, date={" + data + "}");
+			System.out.printf("%-15s %16s %13s %-15s %5s %-15s %n", count + " - Venda "+idClient,id," ",price," ",data);
 		}
 	}
 
@@ -72,5 +75,25 @@ public class SaleDAO {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	public Sale vendaPorId(Connection conn,int id_venda) throws SQLException {
+		PreparedStatement statement = conn.prepareStatement("select * from venda where id_venda = ?");
+		ResultSet resultSet = statement.getResultSet();
+		statement.setInt(1, id_venda);
+		statement.execute();
+		resultSet = statement.executeQuery();
+		
+		if(resultSet.next()) {
+			int id = resultSet.getInt("id_venda");
+			int idCliente = resultSet.getInt("id_cliente");
+			ClientDAO clientDao = new ClientDAO(conn);
+			Client client = clientDao.clientePorId(conn, idCliente);
+			double price = resultSet.getDouble("valor");
+			Date data = resultSet.getDate("data"); 
+			Sale venda = new Sale(client,data);
+			venda.setId(id);
+			return venda;
+		}
+		return null;
 	}
 }

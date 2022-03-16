@@ -12,11 +12,11 @@ public class SaleItem {
 	public SaleItem() {}
 
 	public SaleItem(Sale sale, Product product, int amount, double unitPrice) {
-		super();
 		this.sale = sale;
 		this.product = product;
 		this.amount = amount;
 		this.unitPrice = unitPrice;
+		this.subtotal = amount*unitPrice;
 	}
 
 	public long getId() {

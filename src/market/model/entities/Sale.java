@@ -11,9 +11,8 @@ public class Sale {
 	
 	public Sale() {}
 
-	public Sale(Client client, double price, Date data) {
+	public Sale(Client client, Date data) {
 		this.client = client;
-		this.price = price;
 		this.data = data;
 	}
 
