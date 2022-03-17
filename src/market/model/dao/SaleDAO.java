@@ -96,4 +96,24 @@ public class SaleDAO {
 		}
 		return null;
 	}
+	public void listVendaECliente() throws SQLException {
+		PreparedStatement statement = conn.prepareStatement("select id_venda as id, v.valor as vlr, v.data as dt, c.nome as nm, c.cpf as cpf from venda as v "
+				+ "inner join cliente as c on v.id_cliente = c.id_cliente;");
+		statement.execute();
+
+		ResultSet resultSet = statement.getResultSet();
+		int count = 0;
+		while (resultSet.next()) {
+			count++;
+			int id = resultSet.getInt("id");
+			double price = resultSet.getDouble("vlr");
+			Date data = resultSet.getDate("dt");
+			String clientName = resultSet.getString("nm");
+			String clientCpf = resultSet.getString("cpf");
+//			System.out.println("Sale " + count + ": id={" + id + "}, client={" + idClient + "}, price={" + price
+//					+ "}, date={" + data + "}");
+			System.out.printf("%-15s %8s %-5s %10s %5s %-15s %10s %5s %-5s %n", count + " - Venda "+id," ",price," ",data, " ", clientName," ",clientCpf);
+		}
+	}
+	
 }

@@ -1,6 +1,7 @@
 package market.model.entities;
 
 import java.util.Date;
+import java.util.List;
 
 public class Sale {
 
@@ -36,8 +37,11 @@ public class Sale {
 		return price;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public void setPrice(List<SaleItem>listaItensVenda) {
+		this.price = listaItensVenda.stream()
+				.filter(si->si.getSale().getId() == this.getId())
+				.mapToDouble(si->si.getSubtotal())
+				.sum();
 	}
 
 	public Date getData() {

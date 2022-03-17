@@ -191,8 +191,9 @@ public class Menu {
 			System.out.println("=                                                  =");
 			System.out.println("=                1-Criar nova venda                =");
 			System.out.println("=                2-Listar vendas                   =");
-			System.out.println("=                3-Deletar uma venda               =");
-			System.out.println("=                4-Itens de uma venda              =");
+			System.out.println("=                3-Listar vendas com clientes      =");
+			System.out.println("=                4-Deletar uma venda               =");
+			System.out.println("=                5-Itens de uma venda              =");
 			System.out.println("=                                                  =");
 			System.out.println("=                0-Sair                            =");
 			System.out.println("====================================================");
@@ -224,9 +225,18 @@ public class Menu {
 				break;
 			case 3:
 				vendaDao = new SaleDAO(conn);
-				System.out.println("Selecione a seguir o ID do produto: \n");
+				System.out.println("============================================================================================");
+				System.out.println("=                               Lista de Vendas com Clientes                               =");
+				System.out.println("============================================================================================");
+				System.out.printf("%10s%20s%27s%20s%20s%n", "NOME","TOTAL", "DATA(ano-mes-dia)","CLIENTE","CPF");
+				System.out.println("--------------------------------------------------------------------------------------------");
+				vendaDao.listVendaECliente();
+				break;
+			case 4:
+				vendaDao = new SaleDAO(conn);
+				System.out.println("Selecione a seguir o ID da venda: \n");
 				vendaDao.list();
-				System.out.print("\nDigite o ID do produto a ser removido: ");
+				System.out.print("\nDigite o ID da venda a ser removida: ");
 				try {
 					int idVenda = sc.nextInt();
 					vendaDao.delete(vendaDao.vendaPorId(conn, idVenda));
@@ -236,7 +246,7 @@ public class Menu {
 					System.out.println("\nVenda não encontrada no banco. Venda não deletada.");
 				}
 				break;
-			case 4:
+			case 5:
 				menuItensVenda(conn);
 				break;
 			case 0:
