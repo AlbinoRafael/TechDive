@@ -14,7 +14,6 @@ public class Program {
 			System.out.println("Conexão estabelecida!\n");
 			try {
 				Menu.menuPrincipal(conn);
-
 				factoryConnection.closeConnection(conn);
 			} catch (SQLException e) {
 				System.out.println("\nErro ao se conectar ao banco de dados. Causado por: " + e.getMessage());
