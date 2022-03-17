@@ -57,7 +57,7 @@ public class SaleItemDAO {
 			double subtotal = resultSet.getDouble("subtotal");
 //			System.out.println("Sale " + count + ": id={" + id + "}, product={" + idProduct + "},sale={"+idSale+"}, amount={"+amount+"}, unit_price={" + unitPrice
 //					+ "}, subtotal={" + subtotal + "}");
-			System.out.printf("%-5s %4s %-6s %-15s %3s %-35s %-5s %-5s %-5s %5s %-5s %5s %n", count + " - ",
+			System.out.printf("%-5s %4s %-6s %-15s %3s %-35s %-5s %-5s %-5s %5s %-5s %10s %n", count + " - ",
 					id, " ", prod.getName()," ",prod.getDescription(), " ", amount, " ", unitPrice, " ", subtotal);
 		}
 	}

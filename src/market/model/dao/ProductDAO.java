@@ -90,5 +90,21 @@ public class ProductDAO {
 		}
 		return null;
 	}
-
+	public Product produtoPorNome(Connection conn,String nome) throws SQLException {
+		PreparedStatement statement = conn.prepareStatement("select * from produto where nome = ?");
+		ResultSet resultSet = statement.getResultSet();
+		statement.setString(1, nome);
+		statement.execute();
+		resultSet = statement.executeQuery();
+		
+		if(resultSet.next()) {
+			int id = resultSet.getInt("id_produto");
+			String name = resultSet.getString("nome");
+			String description = resultSet.getString("descricao");
+			Product produto = new Product(name,description);
+			produto.setId(id);
+			return produto;
+		}
+		return null;
+	}
 }

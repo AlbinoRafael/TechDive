@@ -87,4 +87,21 @@ public class ClientDAO {
 		}
 		return null;
 	}
+	public Client clientePorNome(Connection conn,String nome) throws SQLException {
+		PreparedStatement statement = conn.prepareStatement("select * from cliente where nome = ?");
+		ResultSet resultSet = statement.getResultSet();
+		statement.setString(1, nome);
+		statement.execute();
+		resultSet = statement.executeQuery();
+		
+		if(resultSet.next()) {
+			int id = resultSet.getInt("id_cliente");
+			String name = resultSet.getString("nome");
+			String cpf = resultSet.getString("cpf");
+			Client client = new Client(name,cpf);
+			client.setId(id);
+			return client;
+		}
+		return null;
+	}
 }
